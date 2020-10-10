@@ -57,9 +57,17 @@ export default function MusicPlayer({ song }) {
         setVolume(v);
     }
 
+    const changeCurrentTime = time => {
+        player.currentTime = time;
+        setCurrentTime(time);
+    }
+
     return (
         <div className="player bg-white shadow">
-            <div className="progress-bar">
+            <div className="progress-bar" onClick={event => {
+                const progress = event.clientX / window.innerWidth;
+                changeCurrentTime(duration * progress);
+            }}>
                 <div className="progress" style={{width: Helper.completionPercentage(currentTime, duration) + "%"}}></div>
             </div>
             <div className="flex-grow">
@@ -74,7 +82,7 @@ export default function MusicPlayer({ song }) {
                                 {Helper.unescape(song.song)}
                                 <span className="text-gray-400 text-xxs px-2">{formatCount(song.play_count)} plays</span>
                             </div>
-                            <div className="text-gray-500 text-xs">{Helper.unescape(song.singers)} · {formatCount(song.play_count)} plays</div>
+                            <div className="text-gray-500 text-xs">{Helper.unescape(song.singers)} · {song.label}</div>
                         </div>
                     </div>
                     {/* Controls */}

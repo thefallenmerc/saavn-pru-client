@@ -6,9 +6,18 @@ import SuggestionTile from './components/suggestion-tile';
 import MusicPlayer from './components/media-player';
 import Loader from './components/loader';
 
+const defaultSong = {
+  song: "Some Song",
+  singers: "Some Singer",
+  play_count: 9999999,
+  media_url: "",
+  label: "Some Label",
+  image: "https://images.unsplash.com/photo-1573247353133-0290e4606fbf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+}
+
 function App() {
 
-  const [song, setSong] = useState(null);
+  const [song, setSong] = useState(defaultSong);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
