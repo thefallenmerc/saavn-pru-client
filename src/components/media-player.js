@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Helper from '../config/helper';
+import { Grid, Slider } from '@material-ui/core';
 
 export default function MusicPlayer({ song }) {
 
@@ -29,7 +30,14 @@ export default function MusicPlayer({ song }) {
             };
 
             player.onerror = error => {
-                console.log("Error " + error.code + "; details: " + error.message);
+                error = player.error;
+                console.log("Error " + player.error.code + "; details: " + player.error.message);
+                // restart the player on fragment error;
+                if(error.code === 2) {
+                    player.src = song.media_url + "?v=" + (new Date()).getTime();
+                    player.load();
+                    player.play();
+                }
             }
 
             // on time update
@@ -109,7 +117,17 @@ export default function MusicPlayer({ song }) {
                     </div>
                     {/* More Details */}
                     <div className="flex items-center text-xs text-gray-500 px-4">
-                        {Helper.formatSeconds(currentTime)}/{Helper.formatSeconds(duration)}
+                        {/* Volume slider */}
+                        <Grid item xs style={{ margin: '5px 1.25rem 0' }}>
+                            <Slider
+                                value={volume * 100}
+                                color="primary"
+                                onChange={(event, value) => {
+                                    changeVolume(value / 100);
+                                }} aria-labelledby="continuous-slider" style={{ width: "100px" }} />
+                        </Grid>
+                        {/* Time and stuff */}
+                        <span>{Helper.formatSeconds(currentTime)}/{Helper.formatSeconds(duration)}</span>
                     </div>
                 </div>
             </div>
