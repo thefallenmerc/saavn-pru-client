@@ -2,6 +2,6 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 
 ### Features
 
-[] Searching songs on saavn
-[] Playing songs
-[] Seeking song
+- [ ] Searching songs on saavn
+- [ ] Playing songs
+- [ ] Seeking song

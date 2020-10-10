@@ -25,7 +25,12 @@ export default function MusicPlayer({ song }) {
             player.onloadedmetadata = event => {
                 setDuration(player.duration);
                 setCurrentTime(player.currentTime);
+                play();
             };
+
+            player.onerror = error => {
+                console.log("Error " + error.code + "; details: " + error.message);
+            }
 
             // on time update
             player.ontimeupdate = event => {
@@ -33,6 +38,13 @@ export default function MusicPlayer({ song }) {
             }
         }
         console.info("Player updated!");
+
+        // cleanup
+        return () => {
+            player.pause();
+            player.removeAttribute('src');
+            player.load();
+        };
     }, [player]);
 
     // If song isnt there, or src is not set, return error
@@ -42,14 +54,14 @@ export default function MusicPlayer({ song }) {
 
     // Set state to playing
     const play = () => {
-        player.play();
         setPaused(false);
+        return player.play();
     };
 
     // Set state to paused
     const pause = () => {
-        player.pause();
         setPaused(true);
+        return player.pause();
     }
 
     const changeVolume = v => {
@@ -68,7 +80,7 @@ export default function MusicPlayer({ song }) {
                 const progress = event.clientX / window.innerWidth;
                 changeCurrentTime(duration * progress);
             }}>
-                <div className="progress" style={{width: Helper.completionPercentage(currentTime, duration) + "%"}}></div>
+                <div className="progress" style={{ width: Helper.completionPercentage(currentTime, duration) + "%" }}></div>
             </div>
             <div className="flex-grow">
                 <div className="flex justify-between">
