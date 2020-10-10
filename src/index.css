@@ -11,6 +11,15 @@ code {
 
 /* custom classes */
 
+.sidebar {
+  width: 250px;
+}
+
+.sidebar .suggestion-list {
+  overflow-y: auto;
+  max-height: calc(100vh - 101px);
+}
+
 .player {
   position: fixed;
   bottom: 0;

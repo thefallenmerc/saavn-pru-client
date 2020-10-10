@@ -64,20 +64,22 @@ function App() {
 
   return (
     <div className="flex justify-between">
-      <div className="p-2 w-64 h-screen bg-gray-200">
-        <input value={query}
-          className="border rounded py-1 px-2 block w-full"
-          placeholder="Search..."
-          onChange={event => {
-            const { value } = event.target;
-            setQuery(value);
-            if (value.trim()) {
-              debounceQuery(value);
-            } else {
-              // not show any random suggestion on clearing search field
-              debounceQuery.cancel();
-            }
-          }} />
+      <div className="sidebar bg-gray-200">
+        <div className="p-2">
+          <input value={query}
+            className="border rounded py-1 px-2 block w-full"
+            placeholder="Search..."
+            onChange={event => {
+              const { value } = event.target;
+              setQuery(value);
+              if (value.trim()) {
+                debounceQuery(value);
+              } else {
+                // not show any random suggestion on clearing search field
+                debounceQuery.cancel();
+              }
+            }} />
+        </div>
         {
           isLoading
             ? <Loader size="24px" className="mt-2 w-full flex justify-center" />
@@ -85,7 +87,7 @@ function App() {
         }
       </div>
       <MusicPlayer song={song} />
-      <div className="p-2 w-64 h-screen bg-gray-200">
+      <div className="sidebar bg-gray-200">
         <div className="py-1 px-2 block w-full uppercase font-bold flex items-center justify-between">
           <div>Recent Plays</div>
           <button className="rounded-lg px-1 shadow text-xxs uppercase text-white bg-red-500 focus:outline-none"
@@ -93,9 +95,11 @@ function App() {
               clearRecents();
             }}>clear</button>
         </div>
-        {
-          recent.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
-        }
+        <div className="suggestion-list">
+          {
+            recent.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
+          }
+        </div>
       </div>
     </div>
   );
