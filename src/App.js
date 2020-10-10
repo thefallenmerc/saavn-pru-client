@@ -4,11 +4,13 @@ import axios from 'axios';
 import Endpoints from './config/endpoints';
 import SuggestionTile from './components/suggestion-tile';
 import MusicPlayer from './components/media-player';
+import Loader from './components/loader';
 
 function App() {
 
   const [song, setSong] = useState(null);
   const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [recent, setRecent] = useState([]);
 
@@ -43,9 +45,11 @@ function App() {
 
   const debounceQuery = useCallback(debounce(value => {
     // Search
+    setIsLoading(true);
     axios.get(Endpoints.search(value))
       .then(response => {
         setSuggestions(response.data);
+        setIsLoading(false);
       })
   }, 1000), []);
 
@@ -66,7 +70,9 @@ function App() {
             }
           }} />
         {
-          suggestions.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
+          isLoading
+            ? <Loader size="24px" className="mt-2 w-full flex justify-center" />
+            : suggestions.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
         }
       </div>
       <MusicPlayer song={song} />

@@ -1,0 +1,8 @@
+
+.icon-pause { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf00e;&nbsp;'); }
+.icon-play { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf00f;&nbsp;'); }
+.icon-to-end { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf010;&nbsp;'); }
+.icon-to-start { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf011;&nbsp;'); }
+.icon-fast-forward { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf012;&nbsp;'); }
+.icon-fast-backward { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf013;&nbsp;'); }
+.icon-stop { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf080;&nbsp;'); }

@@ -9,6 +9,51 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/* custom classes */
+
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.progress-bar {
+  cursor: pointer;
+  height: 3px;
+  width: 100%;
+  background-color: #ddd;
+}
+
+.progress-bar .progress {
+  content: "";
+  height: 100%;
+  background-color: #2bc5b4;
+}
+
+/* utility */
+
 .text-xxs {
   font-size: .6rem;
+}
+
+/* animations */
+
+.spinner {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid white;
+  border-color: #a9a9a9 #202020 #a9a9a9 #a9a9a9;
+  animation: spin 0.25s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
