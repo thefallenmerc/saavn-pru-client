@@ -5,3 +5,10 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 - [ ] Searching songs on saavn
 - [ ] Playing songs
 - [ ] Seeking song
+- [ ] Volume control
+
+
+### Future Features
+- [ ] Playlist
+- [ ] Keyboard Shortcuts
+- [ ] Persistant volume change 

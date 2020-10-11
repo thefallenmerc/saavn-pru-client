@@ -102,7 +102,7 @@ export default function MusicPlayer({ song }) {
                                 {Helper.unescape(song.song)}
                                 <span className="text-gray-400 text-xxs px-2">{formatCount(song.play_count)} plays</span>
                             </div>
-                            <div className="text-gray-500 text-xs">{Helper.unescape(song.singers)} · {song.label}</div>
+                            <div className="text-gray-500 text-xs">{Helper.unescape(song.singers)} · {Helper.unescape(song.label)}</div>
                         </div>
                     </div>
                     {/* Controls */}
