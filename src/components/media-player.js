@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Helper from '../config/helper';
-import { Grid, Slider } from '@material-ui/core';
+import { Grid, IconButton, Slider } from '@material-ui/core';
 
 export default function MusicPlayer({ song }) {
 
@@ -33,7 +33,7 @@ export default function MusicPlayer({ song }) {
                 error = player.error;
                 console.log("Error " + player.error.code + "; details: " + player.error.message);
                 // restart the player on fragment error;
-                if(error.code === 2) {
+                if (error.code === 2) {
                     player.src = song.media_url + "?v=" + (new Date()).getTime();
                     player.load();
                     player.play();
@@ -83,55 +83,63 @@ export default function MusicPlayer({ song }) {
     }
 
     return (
-        <div className="player bg-white shadow">
-            <div className="progress-bar" onClick={event => {
-                const progress = event.clientX / window.innerWidth;
-                changeCurrentTime(duration * progress);
-            }}>
-                <div className="progress" style={{ width: Helper.completionPercentage(currentTime, duration) + "%" }}></div>
-            </div>
-            <div className="flex-grow">
-                <div className="flex justify-between">
-                    {/* Details */}
-                    <div className="flex">
-                        <div className="p-2">
-                            <img src={song.image} style={{ width: "50px", height: "50px" }} className="rounded shadow-lg" />
-                        </div>
-                        <div className="px-2 flex flex-col justify-center">
-                            <div className="text-sm font-semibold text-gray-800">
-                                {Helper.unescape(song.song)}
-                                <span className="text-gray-400 text-xxs px-2">{formatCount(song.play_count)} plays</span>
-                            </div>
-                            <div className="text-gray-500 text-xs">{Helper.unescape(song.singers)} · {Helper.unescape(song.label)}</div>
-                        </div>
-                    </div>
-                    {/* Controls */}
-                    <div className="flex items-center">
-                        <i className="text-2xl icon icon-to-start cursor-pointer text-gray-800 hover:text-red-500" title="Play Previous" onClick={() => { play() }}></i>
-                        {
-                            player.paused
-                                ? <i className="text-4xl icon icon-play cursor-pointer text-gray-800 hover:text-red-500" title="Play" onClick={() => { play() }}></i>
-                                : <i className="text-4xl icon icon-pause cursor-pointer text-gray-800 hover:text-red-500" title="Pause" onClick={() => { pause() }}></i>
-                        }
-                        <i className="text-2xl icon icon-to-end cursor-pointer text-gray-800 hover:text-red-500" title="Play Next" onClick={() => { play() }}></i>
-                    </div>
-                    {/* More Details */}
-                    <div className="flex items-center text-xs text-gray-500 px-4">
-                        {/* Volume slider */}
-                        <Grid item xs style={{ margin: '5px 1.25rem 0' }}>
-                            <Slider
-                                value={volume * 100}
-                                color="primary"
-                                onChange={(event, value) => {
-                                    changeVolume(value / 100);
-                                }} aria-labelledby="continuous-slider" style={{ width: "100px" }} />
-                        </Grid>
-                        {/* Time and stuff */}
-                        <span>{Helper.formatSeconds(currentTime)}/{Helper.formatSeconds(duration)}</span>
-                    </div>
+        <div className="player bg-white shadow rounded-lg p-5">
+
+            <div className="player-card px-8 text-center bg-white p-3 rounded-lg">
+                {/* song art and detail */}
+                <div className="beat-box mx-auto my-3 flex justify-center items-center" style={{ width: "150px", height: "150px" }}>
+                    <img src={song.image} style={{ width: "150px", height: "150px" }} className={"rounded-full shadow-lg mx-auto mb-5 " + (player.paused ? "" : "heart-beat")} />
+                </div>
+                <div className="font-bold text-gray-800">
+                    {Helper.unescape(song.song)}
+                </div>
+                <div className="text-gray-500 text-xs">
+                    {Helper.unescape(song.singers)}
+                </div>
+                {/* Seeker */}
+                <Slider
+                    value={Helper.completionPercentage(currentTime, duration)}
+                    onChange={(event, value) => {
+                        changeCurrentTime(duration * (value / 100));
+                    }}
+                />
+                {/* Time and stuff */}
+                <div className="flex justify-between text-gray-500 text-xxs">
+                    <span>{Helper.formatSeconds(currentTime)}</span>
+                    <span>{Helper.formatSeconds(duration)}</span>
                 </div>
             </div>
-        </div>
+            <div className="flex justify-center mt-4">
+                {/* Controls */}
+                <div className="flex items-center">
+                    <i className="icon icon-to-start cursor-pointer text-gray-600 hover:text-red-500" title="Play Previous" onClick={() => { play() }}></i>
+                    <div className="play-pause-overlay p-2 shadow rounded-full m-5">
+                        {
+                            player.paused
+                                ? <i className="text-xl icon icon-play bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10" title="Play" onClick={() => { play() }}></i>
+                                : <i className="text-xl icon icon-pause bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10" title="Pause" onClick={() => { pause() }}></i>
+                        }
+                    </div>
+                    <i className="icon icon-to-end cursor-pointer text-gray-600 hover:text-red-500" title="Play Next" onClick={() => { play() }}></i>
+                </div>
+                {/* More Details */}
+                    {
+                        false && (
+                            <div className="flex items-center text-xs text-gray-500 px-4">
+                                {/* Volume slider */}
+                                <Grid item xs style={{ margin: '5px 1.25rem 0' }}>
+                                    <Slider
+                                        value={volume * 100}
+                                        color="primary"
+                                        onChange={(event, value) => {
+                                            changeVolume(value / 100);
+                                        }} aria-labelledby="continuous-slider" style={{ width: "100px" }} />
+                                </Grid>
+                            </div>
+                        )
+                    }
+                </div>
+            </div>
     )
 }
 

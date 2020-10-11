@@ -13,6 +13,10 @@ code {
 
 .sidebar {
   width: 250px;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
 }
 
 .sidebar .suggestion-list {
@@ -20,30 +24,62 @@ code {
   max-height: calc(100vh - 101px);
 }
 
+.search-box {
+  position: relative;
+}
+
+.clear-suggestion {
+  position: absolute;
+  right: 48px;
+  bottom: 2px;
+}
+
+.loading-suggestion {
+  position: relative;
+  display: inline-flex;
+  right: 40px;
+  top: 5px;
+}
+
+.suggestion-box {
+  position: absolute;
+  z-index: 5;
+}
+
+.suggestion-box>div {
+  border-radius: 0.5em;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+
+.main {
+  padding-left: 250px;
+  min-height: 100vh;
+}
+
 .player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  background: radial-gradient(#aaa, #ddd, #fff, #fff);
 }
 
-.progress-bar {
-  cursor: pointer;
-  height: 3px;
-  width: 100%;
-  background-color: #ddd;
+.player-card {
+  width: 300px;
+  margin: auto;
+  box-shadow: 3px 10px 15px 5px #0001;
 }
 
-.progress-bar .progress {
-  content: "";
-  height: 100%;
-  background-color: #2bc5b4;
+.play-pause-overlay {
+  background-color: #ddd1;
 }
 
 /* utility */
 
 .text-xxs {
   font-size: .6rem;
+}
+
+.rounded-xl {
+  border-radius: 2rem;
 }
 
 /* animations */
@@ -58,11 +94,39 @@ code {
   animation: spin 0.25s linear infinite;
 }
 
+/*  */
+
+/* .beat-box { */
+
+/*  */
+
+/* } */
+
+.heart-beat {
+  transition: all 0.2s;
+  animation: beat 0.5s linear infinite;
+}
+
+@keyframes beat {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(0.9);
+  }
+  90% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(359deg);
   }
 }

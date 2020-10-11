@@ -5,6 +5,10 @@ import Endpoints from './config/endpoints';
 import SuggestionTile from './components/suggestion-tile';
 import MusicPlayer from './components/media-player';
 import Loader from './components/loader';
+import CloseIcon from '@material-ui/icons/Close';
+import { Button, IconButton } from '@material-ui/core';
+import RecentTile from './components/recent-tile';
+import PlaylistItem from './components/playlist-item';
 
 const defaultSong = {
   song: "Some Song",
@@ -63,7 +67,8 @@ function App() {
   }, 1000), []);
 
   return (
-    <div className="flex justify-between">
+    <div className="bg-gray-100">
+      {/* sidebar */}
       <div className="sidebar bg-gray-200">
         <div className="p-2">
           <input value={query}
@@ -86,19 +91,98 @@ function App() {
             : suggestions.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
         }
       </div>
-      <MusicPlayer song={song} />
-      <div className="sidebar bg-gray-200">
-        <div className="py-1 px-2 block w-full uppercase font-bold flex items-center justify-between">
-          <div>Recent Plays</div>
-          <button className="rounded-lg px-1 shadow text-xxs uppercase text-white bg-red-500 focus:outline-none"
-            onClick={() => {
-              clearRecents();
-            }}>clear</button>
-        </div>
-        <div className="suggestion-list">
+      {/* main area */}
+      <div className="main">
+        {/* Search field */}
+        <div className="pt-6 py-2 px-10 search-box">
+          <input value={query}
+            className="border py-3 px-5 w-full md:w-1/2 focus:outline-none"
+            style={
+              suggestions.length > 0
+                ? {
+                  borderTopLeftRadius: "0.5em",
+                  borderTopRightRadius: "0.5em",
+                  borderBottom: "none"
+                }
+                : {
+                  borderRadius: "2em"
+                }
+            }
+            placeholder="Search..."
+            onChange={event => {
+              const { value } = event.target;
+              setQuery(value);
+              if (value.trim()) {
+                debounceQuery(value);
+              } else {
+                // not show any random suggestion on clearing search field
+                debounceQuery.cancel();
+              }
+            }} />
+          {/* Clear suggestion button */}
           {
-            recent.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
+            isLoading
+              ? <Loader size="24px" className="loading-suggestion" />
+              : suggestions.length > 0
+                ? (
+                  <IconButton className="clear-suggestion focus:outline-none" title="Clear Suggestions"
+                    onClick={() => {
+                      setQuery("");
+                      setSuggestions([]);
+                    }}>
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                )
+                : <span></span>
           }
+          {/* Suggestion list */}
+          {
+            suggestions.length > 0 && (
+              <div className="suggestion-box rounded-lg pr-10 w-full md:w-1/2">
+                <div className="bg-white py-2 shadow-lg border">
+                  {
+                    isLoading
+                      ? <Loader size="24px" className="mt-2 w-full flex justify-center" />
+                      : suggestions.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
+                  }
+                </div>
+              </div>
+            )
+          }
+        </div>
+        {/* Main Content */}
+        <div className="pl-10 pt-3 flex">
+          <div className="md:w-3/5 w-full">
+            {/* recent */}
+            <div className="pl-10 flex items-center">
+              <span className="text-xl font-bold text-gray-800 mr-3">Recent Played</span>
+              <IconButton typeof="danger" className="focus:outline-none" onClick={() => {
+                clearRecents();
+              }}><CloseIcon fontSize="small" /></IconButton>
+            </div>
+            <div className="pl-10 flex items-center overflow-auto">
+              {
+                recent.map(recent => <RecentTile recent={recent} playSong={playSong} key={recent.id} />)
+              }
+            </div>
+            <div className="py-5">
+              {/* Song List */}
+              <h1 className="text-xl font-bold text-gray-800">Most Popular</h1>
+              <span className="font-bold text-gray-500 text-xs">50 Songs</span>
+              <div className="py-2">
+                {
+                  recent.map(recent => <PlaylistItem song={recent} playSong={playSong} key={recent.id} />)
+                }
+              </div>
+            </div>
+          </div>
+          <div className="md:w-2/5 w-full px-5">
+            <h1 className="text-xl font-bold text-gray-800">Now Playing</h1>
+            <span className="font-bold text-gray-500 text-xs">50 Songs on the list</span>
+            <div className="py-2">
+              <MusicPlayer song={song} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
