@@ -116,8 +116,8 @@ export default function MusicPlayer({ song }) {
                     <div className="play-pause-overlay p-2 shadow rounded-full m-5">
                         {
                             player.paused
-                                ? <i className="text-xl icon icon-play bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10" title="Play" onClick={() => { play() }}></i>
-                                : <i className="text-xl icon icon-pause bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10" title="Pause" onClick={() => { pause() }}></i>
+                                ? <i className="text-xl icon icon-play bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10 play-button" title="Play" onClick={() => { play() }}></i>
+                                : <i className="text-xl icon icon-pause bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10 pause-button" title="Pause" onClick={() => { pause() }}></i>
                         }
                     </div>
                     <i className="icon icon-to-end cursor-pointer text-gray-600 hover:text-red-500" title="Play Next" onClick={() => { play() }}></i>

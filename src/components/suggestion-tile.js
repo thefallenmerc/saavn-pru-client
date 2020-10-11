@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SuggestionTile({ suggestion, playSong }) {
     return (
-        <div className="p-2 hover:bg-gray-100 flex items-center cursor-pointer"
+        <div className="p-2 hover:bg-gray-100 animated flex items-center cursor-pointer"
             title={"Play " + suggestion.song} onClick={() => {
                 playSong(suggestion);
             }}>

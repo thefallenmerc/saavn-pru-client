@@ -58,6 +58,16 @@ code {
   min-height: 100vh;
 }
 
+.playlist-item {
+  transition: all 0.4s;
+  box-shadow: 0px 5px 15px 0px #aaa3;
+}
+
+.favorite-maker:hover {
+  transition: all 0.4s;
+  color: red;
+}
+
 .player {
   background: radial-gradient(#aaa, #ddd, #fff, #fff);
 }
@@ -70,6 +80,11 @@ code {
 
 .play-pause-overlay {
   background-color: #ddd1;
+  transition: all 0.4s;
+}
+
+.play-button, .pause-button, .animated {
+  transition: all 0.4s;
 }
 
 /* utility */

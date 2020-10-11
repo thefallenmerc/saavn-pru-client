@@ -69,27 +69,13 @@ function App() {
   return (
     <div className="bg-gray-100">
       {/* sidebar */}
-      <div className="sidebar bg-gray-200">
-        <div className="p-2">
-          <input value={query}
-            className="border rounded py-1 px-2 block w-full"
-            placeholder="Search..."
-            onChange={event => {
-              const { value } = event.target;
-              setQuery(value);
-              if (value.trim()) {
-                debounceQuery(value);
-              } else {
-                // not show any random suggestion on clearing search field
-                debounceQuery.cancel();
-              }
-            }} />
+      <div className="sidebar bg-white">
+        <div className="p-10 flex flex-col items-center">
+          <img src="https://avatars2.githubusercontent.com/u/20546147?s=460&v=4" 
+          className="rounded-full w-32 h-32 shadow-lg" />
+          <div className="font-bold text-gray-800 text-xl mt-5 text-center">Chahar</div>
+          <div className="text-gray-500 text-center">chaharshubhamsingh</div>
         </div>
-        {
-          isLoading
-            ? <Loader size="24px" className="mt-2 w-full flex justify-center" />
-            : suggestions.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={playSong} key={suggestion.id} />)
-        }
       </div>
       {/* main area */}
       <div className="main">
