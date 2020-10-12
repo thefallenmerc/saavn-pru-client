@@ -2,8 +2,24 @@ import React, { useEffect, useState } from 'react'
 import Helper from '../config/helper';
 import { Grid, IconButton, Slider } from '@material-ui/core';
 
+
+
+const defaultSong = {
+    song: "Some Song",
+    singers: "Some Singer",
+    play_count: 9999999,
+    media_url: "",
+    label: "Some Label",
+    image: "https://images.unsplash.com/photo-1573247353133-0290e4606fbf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+}
+
 export default function MusicPlayer({ song }) {
 
+    if(!song) {
+        song = defaultSong;
+    }
+
+    // player internal states
     const [paused, setPaused] = useState(true);
     const [volume, setVolume] = useState(0.3);
     const [duration, setDuration] = useState(0);
@@ -123,23 +139,19 @@ export default function MusicPlayer({ song }) {
                     <i className="icon icon-to-end cursor-pointer text-gray-600 hover:text-red-500" title="Play Next" onClick={() => { play() }}></i>
                 </div>
                 {/* More Details */}
-                    {
-                        false && (
-                            <div className="flex items-center text-xs text-gray-500 px-4">
-                                {/* Volume slider */}
-                                <Grid item xs style={{ margin: '5px 1.25rem 0' }}>
-                                    <Slider
-                                        value={volume * 100}
-                                        color="primary"
-                                        onChange={(event, value) => {
-                                            changeVolume(value / 100);
-                                        }} aria-labelledby="continuous-slider" style={{ width: "100px" }} />
-                                </Grid>
-                            </div>
-                        )
-                    }
+                <div className="flex items-center text-xs text-gray-500">
+                    {/* Volume slider */}
+                    <Grid item xs style={{ margin: '5px 0 0 1.25rem' }}>
+                        <Slider
+                            value={volume * 100}
+                            color="primary"
+                            onChange={(event, value) => {
+                                changeVolume(value / 100);
+                            }} aria-labelledby="continuous-slider" style={{ width: "100px" }} />
+                    </Grid>
                 </div>
             </div>
+        </div>
     )
 }
 
