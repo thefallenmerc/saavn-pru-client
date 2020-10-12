@@ -10,10 +10,8 @@ import Sidebar from './components/sidebar';
 
 function App() {
 
-  // current playing song
-  const [song, setSong] = useState(null);
-  // currently playing list
-  const [playingList, setPlayingList] = useState("Recent");
+  // currently playing list and its index
+  const [playingList, setPlayingList] = useState(["Recent", 0]);
   // current shown playlist in app
   const [selectedPlaylist, setSelectedPlaylist] = useState("Recent");
   // list of suggestions in search
@@ -45,8 +43,14 @@ function App() {
   // Add song to playlist
   const addToPlaylist = (playlistName, song) => {
     if ((playlistName in playlists)) {
-      if (playlists[playlistName].findIndex(s => s.id === song.id) < 0) {
-        updatePlaylist(playlistName, [...playlists[playlistName], song])
+      const oldPlaylist = playlists[playlistName];
+      const indexOfSongInOldList = playlists[playlistName].findIndex(s => s.id === song.id);
+      if (indexOfSongInOldList < 0) {
+        updatePlaylist(playlistName, [...oldPlaylist, song])
+        // index at which song is added
+        return oldPlaylist.length;
+      } else {
+        return indexOfSongInOldList;
       }
     }
   }
@@ -64,12 +68,17 @@ function App() {
   }
 
   // Play a given song
-  const playSong = song => {
-    // add to recent if not there
-    if (playlists["Recent"].findIndex(r => r.id === song.id) === -1) {
-      addToPlaylist("Recent", song);
-    }
-    setSong(song);
+  const playSong = (playlistName, songIndex) => {
+    setPlayingList([playlistName, songIndex]);
+    try {
+      const song = playlists[playlistName][songIndex];
+      if (song) {
+        // add to recent if not there
+        if (playlists["Recent"].findIndex(r => r.id === song.id) === -1) {
+          addToPlaylist("Recent", song);
+        }
+      }
+    } catch (e) { console.log("adding to recent failed at playSong") }
   }
 
   const addToFav = song => {
@@ -79,11 +88,33 @@ function App() {
   // Clear recent songs
   const clearRecents = () => {
     if (playlists["Recent"].length > 0) {
-      playlists["Recent"] = [];
-      localStorage.setItem('playlists', JSON.stringify(playlists));
-      setPlaylists(playlists);
+      updatePlaylist("Recent", []);
     }
   }
+
+  // Play next song
+  const nextSong = () => {
+    const [playListName, songIndex] = playingList;
+    // check if current index is the last index
+    if (songIndex === playlists[playListName].length - 1) {
+      // play the first song
+      setPlayingList([playListName, 0]);
+    } else {
+      setPlayingList([playListName, songIndex + 1]);
+    }
+  };
+
+  // Play prev song
+  const prevSong = () => {
+    const [playListName, songIndex] = playingList;
+    // check if current index is the first index
+    if (songIndex === 0) {
+      // play the first song
+      setPlayingList([playListName, playlists[playListName].length - 1]);
+    } else {
+      setPlayingList([playListName, songIndex - 1]);
+    }
+  };
 
   // load playlists
   useEffect(() => {
@@ -131,9 +162,13 @@ function App() {
       {/* main area */}
       <div className="main">
         {/* Search field */}
-        <SearchBox suggestions={suggestions} setSuggestions={setSuggestions} playSong={playSong} />
+        <SearchBox
+          suggestions={suggestions}
+          setSuggestions={setSuggestions}
+          addToPlaylist={addToPlaylist}
+          playSong={playSong} />
         {/* Main Content */}
-        <div className="pl-10 pt-3 flex">
+        <div className="pl-10 pt-3 flex pb-48">
           <div className="md:w-3/5 w-full">
             {/* recent */}
             {
@@ -166,8 +201,9 @@ function App() {
               <div className="py-2">
                 {
                   selectedPlaylist
-                  && playlists[selectedPlaylist].map(song => <PlaylistItem
+                  && playlists[selectedPlaylist].map((song, index) => <PlaylistItem
                     song={song}
+                    songIndex={index}
                     playSong={playSong}
                     key={song.id}
                     selectedPlaylist={selectedPlaylist}
@@ -183,7 +219,11 @@ function App() {
             <h1 className="text-xl font-bold text-gray-800">Now Playing</h1>
             <span className="font-bold text-gray-500 text-xs">50 Songs on the list</span>
             <div className="py-2">
-              <MusicPlayer song={song} />
+              <MusicPlayer
+                song={playlists[playingList[0]][playingList[1]]}
+                nextSong={nextSong}
+                prevSong={prevSong}
+              />
             </div>
           </div>
         </div>

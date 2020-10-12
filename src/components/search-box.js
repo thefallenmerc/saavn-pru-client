@@ -7,7 +7,7 @@ import SuggestionTile from './suggestion-tile';
 import Endpoints from '../config/endpoints';
 import Loader from './loader';
 
-export default function SearchBox({ suggestions, setSuggestions, playSong }) {
+export default function SearchBox({ suggestions, setSuggestions, addToPlaylist, playSong }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [query, setQuery] = useState("");
@@ -29,7 +29,11 @@ export default function SearchBox({ suggestions, setSuggestions, playSong }) {
 
     const selectSong = song => {
         clearSuggestions();
-        playSong(song);
+        const songIndex = addToPlaylist("Recent", song);
+        if (Number.isInteger(songIndex)) {
+            // take a second and play this
+            playSong("Recent", songIndex);
+        }
     }
 
     return (

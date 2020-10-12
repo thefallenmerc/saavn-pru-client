@@ -5,6 +5,7 @@ import { IconButton } from '@material-ui/core';
 
 export default function PlaylistItem({
     song,
+    songIndex,
     playSong,
     selectedPlaylist,
     playlists,
@@ -28,7 +29,7 @@ export default function PlaylistItem({
             <div title={"Play " + song.song}
                 className="font-bold truncate w-56 flex-grow pr-3 flex-shrink-0 cursor-pointer"
                 onClick={() => {
-                    playSong(song);
+                    playSong(selectedPlaylist, songIndex);
                 }}>{song.song}</div>
             <div className="text-gray-500 font-semibold w-48 truncate flex-shrink-0">{song.singers}</div>
             <div className="text-gray-500 font-semibold w-24">{Helper.formatSeconds(song.duration)}</div>

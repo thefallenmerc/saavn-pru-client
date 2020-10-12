@@ -13,7 +13,7 @@ const defaultSong = {
     image: "https://images.unsplash.com/photo-1573247353133-0290e4606fbf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
 }
 
-export default function MusicPlayer({ song }) {
+export default function MusicPlayer({ song, nextSong, prevSong }) {
 
     if(!song) {
         song = defaultSong;
@@ -128,7 +128,7 @@ export default function MusicPlayer({ song }) {
             <div className="flex justify-center mt-4">
                 {/* Controls */}
                 <div className="flex items-center">
-                    <i className="icon icon-to-start cursor-pointer text-gray-600 hover:text-red-500" title="Play Previous" onClick={() => { play() }}></i>
+                    <i className="icon icon-to-start cursor-pointer text-gray-600 hover:text-red-500" title="Play Previous" onClick={() => { prevSong() }}></i>
                     <div className="play-pause-overlay p-2 shadow rounded-full m-5">
                         {
                             player.paused
@@ -136,7 +136,7 @@ export default function MusicPlayer({ song }) {
                                 : <i className="text-xl icon icon-pause bg-white cursor-pointer text-gray-800 hover:bg-red-500 hover:text-white flex justify-center items-center rounded-full text-center w-10 h-10 pause-button" title="Pause" onClick={() => { pause() }}></i>
                         }
                     </div>
-                    <i className="icon icon-to-end cursor-pointer text-gray-600 hover:text-red-500" title="Play Next" onClick={() => { play() }}></i>
+                    <i className="icon icon-to-end cursor-pointer text-gray-600 hover:text-red-500" title="Play Next" onClick={() => { nextSong() }}></i>
                 </div>
                 {/* More Details */}
                 <div className="flex items-center text-xs text-gray-500">
