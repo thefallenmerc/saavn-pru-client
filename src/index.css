@@ -65,6 +65,7 @@ body {
 .playlist-item-menu {
   position: absolute;
   right: 0;
+  z-index: 4;
   min-width: 150px;
 }
 
