@@ -45,6 +45,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
                 play();
             };
 
+            // Handle error
             player.onerror = error => {
                 error = player.error;
                 console.log("Error " + player.error.code + "; details: " + player.error.message);
@@ -54,6 +55,16 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
                     player.load();
                     player.play();
                 }
+            }
+
+            player.onwaiting = _ => {
+                // TODO: set buffering state
+            }
+
+            // Play next song on end
+            player.onended = _ => {
+                // TODO: Check for loop enabled or not
+                nextSong();
             }
 
             // on time update
@@ -99,7 +110,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
     }
 
     return (
-        <div className="player bg-white shadow rounded-lg p-5">
+        <div className="player p-5">
 
             <div className="player-card px-8 text-center bg-white p-3 rounded-lg">
                 {/* song art and detail */}
@@ -125,7 +136,8 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
                     <span>{Helper.formatSeconds(duration)}</span>
                 </div>
             </div>
-            <div className="flex justify-center mt-4">
+            {/* Control Card */}
+            <div className="flex player-card bg-white shadow rounded-lg justify-center mt-5">
                 {/* Controls */}
                 <div className="flex items-center">
                     <i className="icon icon-to-start cursor-pointer text-gray-600 hover:text-red-500" title="Play Previous" onClick={() => { prevSong() }}></i>

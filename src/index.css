@@ -70,12 +70,13 @@ body {
 }
 
 .player {
-  background: radial-gradient(#aaa, #ddd, #fff, #fff);
+  background: radial-gradient(#aaa, #ddd, #fff0, #fff0);
 }
 
 .player-card {
   width: 300px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   box-shadow: 3px 10px 15px 5px #0001;
 }
 
