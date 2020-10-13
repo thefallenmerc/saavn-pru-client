@@ -67,6 +67,24 @@ function App() {
     }
   }
 
+  // remove a playlist from list
+  const removePlaylist = playlistName => {
+    // check if it exists
+    if (playlistName in playlists) {
+      // cannot delete recent and favorite
+      if (!["Recent", "Favorite"].includes(playlistName)) {
+        const oldPlaylist = { ...playlists };
+        delete oldPlaylist[playlistName];
+        console.log('updating', oldPlaylist)
+        // if this is selected playlist, set another as selected (recent)
+        updatePlaylists(oldPlaylist);
+        if (selectedPlaylist === playlistName) {
+          setSelectedPlaylist("Recent");
+        }
+      }
+    }
+  }
+
   // Play a given song
   const playSong = (playlistName, songIndex) => {
     setPlayingList([playlistName, songIndex]);
@@ -156,6 +174,7 @@ function App() {
         playlists={playlists}
         addPlaylist={addPlaylist}
         selectedPlaylist={selectedPlaylist}
+        removePlaylist={removePlaylist}
         selectPlaylist={playlistName => {
           setSelectedPlaylist(playlistName);
         }} />
@@ -196,11 +215,11 @@ function App() {
                 {selectedPlaylist ? selectedPlaylist : "No playlist selected"}
               </h1>
               <span className="font-bold text-gray-500 text-xs">
-                {selectedPlaylist ? playlists[selectedPlaylist].length : "0"} Song(s)
+                {selectedPlaylist && playlists[selectedPlaylist] ? playlists[selectedPlaylist].length : "0"} Song(s)
               </span>
               <div className="py-2">
                 {
-                  selectedPlaylist
+                  selectedPlaylist && playlists[selectedPlaylist]
                   && playlists[selectedPlaylist].map((song, index) => <PlaylistItem
                     song={song}
                     songIndex={index}

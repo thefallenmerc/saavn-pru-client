@@ -6,9 +6,14 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 - [ ] Playing songs
 - [ ] Seeking song
 - [ ] Volume control
+- [ ] Add / Remove playlists
+- [ ] Play a playlist
+- [ ] Next / Previous songs
+
 
 
 ### Future Features
-- [ ] Playlist
-- [ ] Keyboard Shortcuts
 - [ ] Persistant volume change 
+- [ ] Shuffle
+- [ ] Redux
+- [ ] Song list (restructure the current criteria)

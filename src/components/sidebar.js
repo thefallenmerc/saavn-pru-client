@@ -1,10 +1,26 @@
 import React, { useState } from 'react'
 import { Add as AddIcon } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
+import ItemMenu from './item-menu';
 
-export default function Sidebar({ playlists, addPlaylist, selectPlaylist, selectedPlaylist }) {
+export default function Sidebar({
+    playlists,
+    addPlaylist,
+    removePlaylist,
+    selectPlaylist,
+    selectedPlaylist
+}) {
 
     const [newPlaylistName, setNewPlaylistName] = useState("");
+
+    // somhow selectPlaylist doesnt directly work in further subcomponents
+    const safeSelectPlaylist = playlistName => {
+        selectPlaylist(playlistName);
+    }
+
+    const safeRemovePlaylist = playlistName => {
+        removePlaylist(playlistName);
+    }
 
     return (
         <div className="sidebar bg-white">
@@ -20,13 +36,22 @@ export default function Sidebar({ playlists, addPlaylist, selectPlaylist, select
                     Object.keys(playlists).map(playlistName => (
                         <div
                             className={
-                                "px-4 text-gray-800 font-bold py-2 hover:bg-gray-300 my-1 rounded-lg cursor-pointer " + (playlistName === selectedPlaylist ? "bg-gray-300" : "")
+                                "px-4 text-gray-800 flex justify-between font-bold py-2 hover:bg-gray-300 my-1 rounded-lg cursor-pointer " + (playlistName === selectedPlaylist ? "bg-gray-300" : "")
                             }
                             onClick={() => {
                                 selectPlaylist(playlistName);
                             }}
                             key={playlistName}>
-                            {playlistName}
+                            <span>{playlistName}</span>
+                            <ItemMenu onClick={e => e.stopPropagation()} small buttons={[
+                                {
+                                    action: () => {
+                                        safeSelectPlaylist("Recent");
+                                        removePlaylist(playlistName);
+                                    },
+                                    label: "Remove"
+                                }
+                            ]} />
                         </div>
                     ))
                 }

@@ -51,7 +51,7 @@ export default function PlaylistItem({
                 {
                     isMenuOpen && (
                         <div
-                            className="playlist-item-menu bg-white shadow-lg py-2 rounded">
+                            className="item-menu bg-white shadow-lg py-2 rounded">
                             {
                                 playlists.map(playlistName => (
                                     <button
@@ -62,7 +62,7 @@ export default function PlaylistItem({
                                         className="px-3 py-2 text-left text-sm block w-full hover:bg-gray-200 focus:outline-none">Add to {playlistName}</button>
                                 ))
                             }
-                            <button className="px-3 py-2 text-left text-sm block w-full hover:bg-gray-200"
+                            <button className="px-3 py-2 text-left text-sm block w-full hover:bg-gray-200 focus:outline-none"
                                 onClick={() => {
                                     removeFromPlaylist(selectedPlaylist, song);
                                 }}>Remove</button>

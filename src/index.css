@@ -62,7 +62,7 @@ body {
   color: red;
 }
 
-.playlist-item-menu {
+.item-menu {
   position: absolute;
   right: 0;
   z-index: 4;
