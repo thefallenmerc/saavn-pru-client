@@ -36,7 +36,7 @@ export default function Sidebar({
                     Object.keys(playlists).map(playlistName => (
                         <div
                             className={
-                                "px-4 text-gray-800 flex justify-between font-bold py-2 hover:bg-gray-300 my-1 rounded-lg cursor-pointer " + (playlistName === selectedPlaylist ? "bg-gray-300" : "")
+                                "px-4 text-gray-800 flex justify-between items-center font-bold py-2 hover:bg-gray-300 my-1 rounded-lg cursor-pointer " + (playlistName === selectedPlaylist ? "bg-gray-300" : "")
                             }
                             onClick={() => {
                                 selectPlaylist(playlistName);

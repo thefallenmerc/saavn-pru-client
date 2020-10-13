@@ -1,13 +1,13 @@
 import React from 'react';
 import Helper from '../config/helper';
 
-export default function RecentTile({ recent, playSong }) {
+export default function RecentTile({ recent, songIndex, playSong }) {
     return (
         <div
             className="pr-5 cursor-pointer"
             title={"Play " + recent.song}
             onClick={() => {
-                playSong(recent);
+                playSong("Recent", songIndex);
             }}>
             <div style={{
                 height: "150px",

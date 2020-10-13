@@ -87,6 +87,7 @@ function App() {
 
   // Play a given song
   const playSong = (playlistName, songIndex) => {
+    console.log("playing", playlistName, songIndex);
     setPlayingList([playlistName, songIndex]);
     try {
       const song = playlists[playlistName][songIndex];
@@ -202,7 +203,7 @@ function App() {
                   <div className="mt-3">
                     <RecentCarousal>
                       {
-                        playlists["Recent"].map(recent => <RecentTile recent={recent} playSong={playSong} key={recent.id} />)
+                        playlists["Recent"].map((recent, index) => <RecentTile recent={recent} songIndex={index} playSong={playSong} key={recent.id} />)
                       }
                     </RecentCarousal>
                   </div>
@@ -235,8 +236,8 @@ function App() {
             </div>
           </div>
           <div className="md:w-2/5 w-full px-5">
-            <h1 className="text-xl font-bold text-gray-800">Now Playing</h1>
-            <span className="font-bold text-gray-500 text-xs">50 Songs on the list</span>
+            <h1 className="text-xl font-bold text-gray-800">Now Playing &gt; {playingList[0]}</h1>
+            <span className="font-bold text-gray-500 text-xs">{playlists[playingList[0]].length} Song(s) on the list</span>
             <div className="py-2">
               <MusicPlayer
                 song={playlists[playingList[0]][playingList[1]]}
