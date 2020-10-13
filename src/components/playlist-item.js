@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import Helper from '../config/helper';
-import { Favorite, MoreHoriz as MoreHorizIcon } from '@material-ui/icons'
+import { Favorite, MoreHoriz as MoreHorizIcon, GetApp as ExportIcon } from '@material-ui/icons'
 import { IconButton } from '@material-ui/core';
 
 export default function PlaylistItem({
     song,
     songIndex,
     playSong,
+    playingList,
     selectedPlaylist,
     playlists,
     addToPlaylist,
@@ -23,9 +24,12 @@ export default function PlaylistItem({
                 }
             }}
             className="px-2 py-2 bg-white playlist-item rounded my-3 flex items-center hover:shadow-lg">
-            <span className="font-bold mx-3">01</span>
+            <span className="font-bold mx-3 w-4">{songIndex + 1}</span>
             <img src={song.image} className="rounded w-12 h-12 border" />
-            <i className="icon icon-play text-gray-300 mx-1"></i>
+            <i className="icon icon-play text-gray-300 mx-1" style={
+                selectedPlaylist === playingList[0] && songIndex === playingList[1]
+                ? { color: "red" } : {}
+            }></i>
             <div title={"Play " + song.song}
                 className="font-bold truncate w-56 flex-grow pr-3 flex-shrink-0 cursor-pointer"
                 onClick={() => {
@@ -41,6 +45,7 @@ export default function PlaylistItem({
                         className="favorite-maker" />
                 </IconButton>
             </div>
+            {/* More Options */}
             <div className="text-gray-500 font-semibold w-16 cursor-pointer relative">
                 <IconButton className="focus:outline-none" onClick={() => {
                     setIsMenuOpen(!isMenuOpen);
@@ -62,6 +67,10 @@ export default function PlaylistItem({
                                         className="px-3 py-2 text-left text-sm block w-full hover:bg-gray-200 focus:outline-none">Add to {playlistName}</button>
                                 ))
                             }
+                            <button className="px-3 py-2 text-left text-sm block w-full hover:bg-gray-200 focus:outline-none"
+                                onClick={() => {
+                                    Helper.downloadSong(song);
+                                }}>Download</button>
                             <button className="px-3 py-2 text-left text-sm block w-full hover:bg-gray-200 focus:outline-none"
                                 onClick={() => {
                                     removeFromPlaylist(selectedPlaylist, song);

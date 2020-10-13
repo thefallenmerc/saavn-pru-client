@@ -226,6 +226,7 @@ function App() {
                     songIndex={index}
                     playSong={playSong}
                     key={song.id}
+                    playingList={playingList}
                     selectedPlaylist={selectedPlaylist}
                     playlists={Object.keys(playlists)}
                     addToPlaylist={addToPlaylist}

@@ -2,10 +2,11 @@ import { IconButton } from '@material-ui/core';
 import Axios from 'axios';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
-import CloseIcon from '@material-ui/icons/Close';
+import { Close as CloseIcon, GetApp as ExportIcon} from '@material-ui/icons';
 import SuggestionTile from './suggestion-tile';
 import Endpoints from '../config/endpoints';
 import Loader from './loader';
+import Helper from '../config/helper';
 
 export default function SearchBox({ suggestions, setSuggestions, addToPlaylist, playSong }) {
 
@@ -95,6 +96,16 @@ export default function SearchBox({ suggestions, setSuggestions, addToPlaylist, 
                     </div>
                 )
             }
+            <span className="px-2">
+                <IconButton
+                    className="focus:outline-none"
+                    title="Export playlist"
+                    onClick={() => {
+                        Helper.downloadJson('playlists.json', JSON.parse(localStorage.getItem('playlists')))
+                    }}>
+                    <ExportIcon />
+                </IconButton>
+            </span>
         </div>
     )
 }
