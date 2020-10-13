@@ -33,19 +33,26 @@ export default function Sidebar({ playlists, addPlaylist, selectPlaylist, select
                 <div className="relative">
                     <input
                         className="px-4 text-gray-800 font-bold py-2 my-2 bg-gray-100 rounded-lg focus:outline-none"
-                        placeholder="Add playlist..." value={newPlaylistName} onChange={event => {
+                        placeholder="Add playlist..." value={newPlaylistName}
+                        onKeyDown={event => {
+                            if (event.key === "Enter" && event.target.value.length > 0) {
+                                addPlaylist(newPlaylistName);
+                                setNewPlaylistName("");
+                            }
+                        }}
+                        onChange={event => {
                             setNewPlaylistName(event.target.value);
                         }} />
                     {
                         newPlaylistName && (
                             <IconButton size="small"
-                            className="focus:outline-none"
-                            onClick={
-                                () => {
-                                    addPlaylist(newPlaylistName)
-                                    setNewPlaylistName("")
+                                className="focus:outline-none"
+                                onClick={
+                                    () => {
+                                        addPlaylist(newPlaylistName);
+                                        setNewPlaylistName("");
+                                    }
                                 }
-                            }
                                 style={{
                                     position: "absolute",
                                     right: "15px",
