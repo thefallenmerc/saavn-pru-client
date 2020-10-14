@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MusicPlayer from './components/media-player';
 import CloseIcon from '@material-ui/icons/Close';
-import { Button, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import RecentTile from './components/recent-tile';
 import PlaylistItem from './components/playlist-item';
 import RecentCarousal from './components/recent-carousel';
@@ -98,10 +98,6 @@ function App() {
         }
       }
     } catch (e) { console.log("adding to recent failed at playSong") }
-  }
-
-  const addToFav = song => {
-    addToPlaylist("Favorite", song);
   }
 
   // Clear recent songs

@@ -1,5 +1,5 @@
 import React from 'react';
-import Helper from '../config/helper';
+import Helper from '../lib/helper';
 
 export default function RecentTile({ recent, songIndex, playSong }) {
     return (
@@ -13,7 +13,7 @@ export default function RecentTile({ recent, songIndex, playSong }) {
                 height: "150px",
                 width: "150px"
             }} className="mb-3">
-                <img src={recent.image_500 ? recent.image_500 : recent.image} className="shadow rounded-lg" />
+                <img src={recent.image_500 ? recent.image_500 : recent.image} className="shadow rounded-lg" alt={recent.song} />
             </div>
             <div className="text-gray-800 text-sm truncate">
                 <div className="font-bold">

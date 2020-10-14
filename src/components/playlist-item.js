@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Helper from '../config/helper';
-import { Favorite, MoreHoriz as MoreHorizIcon, GetApp as ExportIcon } from '@material-ui/icons'
+import Helper from '../lib/helper';
+import { Favorite, MoreHoriz as MoreHorizIcon } from '@material-ui/icons'
 import { IconButton } from '@material-ui/core';
 
 export default function PlaylistItem({
@@ -25,7 +25,7 @@ export default function PlaylistItem({
             }}
             className="px-2 py-2 bg-white playlist-item rounded my-3 flex items-center hover:shadow-lg">
             <span className="font-bold mx-3 w-4">{songIndex + 1}</span>
-            <img src={song.image} className="rounded w-12 h-12 border" />
+            <img src={song.image} className="rounded w-12 h-12 border" alt={song.song} />
             <i className="icon icon-play text-gray-300 mx-1" style={
                 selectedPlaylist === playingList[0] && songIndex === playingList[1]
                 ? { color: "red" } : {}

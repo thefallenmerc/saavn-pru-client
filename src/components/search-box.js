@@ -1,12 +1,12 @@
 import { IconButton } from '@material-ui/core';
 import Axios from 'axios';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Close as CloseIcon, GetApp as ExportIcon} from '@material-ui/icons';
 import SuggestionTile from './suggestion-tile';
-import Endpoints from '../config/endpoints';
+import Endpoints from '../lib/endpoints';
 import Loader from './loader';
-import Helper from '../config/helper';
+import Helper from '../lib/helper';
 
 export default function SearchBox({ suggestions, setSuggestions, addToPlaylist, playSong }) {
 

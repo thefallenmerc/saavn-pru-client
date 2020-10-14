@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Helper from '../config/helper';
-import { Grid, IconButton, Slider } from '@material-ui/core';
+import Helper from '../lib/helper';
+import { Grid, Slider } from '@material-ui/core';
 
 
 
@@ -20,6 +20,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
     }
 
     // player internal states
+    // eslint-disable-next-line no-unused-vars
     const [paused, setPaused] = useState(true);
     const [volume, setVolume] = useState(0.3);
     const [duration, setDuration] = useState(0);
@@ -34,6 +35,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
             audioPlayer.volume = volume;
             setPlayer(audioPlayer);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [song]);
 
     useEffect(() => {
@@ -80,6 +82,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
             player.removeAttribute('src');
             player.load();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [player]);
 
     // If song isnt there, or src is not set, return error
@@ -115,7 +118,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
             <div className="player-card px-8 text-center bg-white p-3 rounded-lg">
                 {/* song art and detail */}
                 <div className="beat-box mx-auto my-3 flex justify-center items-center" style={{ width: "150px", height: "150px" }}>
-                    <img src={song.image} style={{ width: "150px", height: "150px" }} className={"rounded-full shadow-lg mx-auto mb-5 " + (player.paused ? "" : "heart-beat")} />
+                    <img src={song.image} alt={song.song} style={{ width: "150px", height: "150px" }} className={"rounded-full shadow-lg mx-auto mb-5 " + (player.paused ? "" : "heart-beat")} />
                 </div>
                 <div className="font-bold text-gray-800">
                     {Helper.unescape(song.song)}
@@ -167,6 +170,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
     )
 }
 
+// eslint-disable-next-line no-unused-vars
 function formatCount(count) {
     return count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
