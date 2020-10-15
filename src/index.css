@@ -23,20 +23,21 @@ body {
 }
 
 .clear-suggestion {
-  position: absolute;
+  position: absolute !important;
   right: 48px;
-  bottom: 2px;
+  bottom: 8px;
 }
 
 .loading-suggestion {
-  position: relative;
-  display: inline-flex;
-  right: 40px;
-  top: 5px;
+  position: absolute !important;
+  right: 55px;
+  bottom: 21px;
 }
 
 .suggestion-box {
   position: absolute;
+  width: 100%;
+  left: 0;
   z-index: 5;
 }
 

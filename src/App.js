@@ -7,9 +7,14 @@ import PlaylistItem from './components/playlist-item';
 import RecentCarousal from './components/recent-carousel';
 import SearchBox from './components/search-box';
 import Sidebar from './components/sidebar';
+import Axios from 'axios';
+import Endpoints from './lib/endpoints';
+import SignInAndSync from './components/signin-and-sync';
 
 function App() {
 
+  // The logged in user
+  const [user, setUser] = useState(null);
   // currently playing list and its index
   const [playingList, setPlayingList] = useState(["Recent", 0]);
   // current shown playlist in app
@@ -131,6 +136,53 @@ function App() {
     }
   };
 
+  // google signin
+  const onSignIn = googleUser => {
+
+    Axios.get(Endpoints.signIn, {
+      headers: {
+        Authorization: "Bearer " + googleUser.tokenId
+      }
+    })
+      .then(response => {
+        const { user } = response.data;
+        setUser(user);
+        // save the user to localstorage
+        localStorage.setItem('user', JSON.stringify(user));
+      })
+      .catch(error => {
+        console.log({ error });
+      })
+  }
+
+  // google signin
+  const onSignInError = error => {
+    console.error(error);
+  }
+
+  // sync state to server
+  const syncToServer = () => {
+    Axios.post(Endpoints.syncUp, {
+      playlists
+    }, {
+      headers: {
+        Authorization: "Bearer " + user.token
+      }
+    })
+  }
+
+  const syncFromServer = () => {
+    Axios.get(Endpoints.syncDown, {
+      headers: {
+        Authorization: "Bearer " + user.token
+      }
+    })
+      .then(response => {
+        const { data } = response;
+        updatePlaylists(data.playlists);
+      })
+  }
+
   // load playlists
   useEffect(() => {
     const playlistFromLocal = localStorage.getItem('playlists');
@@ -177,12 +229,23 @@ function App() {
         }} />
       {/* main area */}
       <div className="main">
-        {/* Search field */}
-        <SearchBox
-          suggestions={suggestions}
-          setSuggestions={setSuggestions}
-          addToPlaylist={addToPlaylist}
-          playSong={playSong} />
+        <div className="flex justify-between items-center">
+          {/* Search field */}
+          <SearchBox
+            suggestions={suggestions}
+            setSuggestions={setSuggestions}
+            addToPlaylist={addToPlaylist}
+            playSong={playSong}
+            onSignIn={onSignIn}
+            onSignInError={onSignInError} />
+          {/* Other options */}
+          <SignInAndSync
+            onSignIn={onSignIn}
+            onSignInError={onSignInError}
+            syncToServer={syncToServer}
+            syncFromServer={syncFromServer}
+            user={user} />
+        </div>
         {/* Main Content */}
         <div className="pl-10 pt-3 flex pb-48">
           <div className="md:w-3/5 w-full">

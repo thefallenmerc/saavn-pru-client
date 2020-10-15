@@ -15,5 +15,8 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 ### Future Features
 - [ ] Persistant volume change 
 - [ ] Shuffle
+- [ ] Add song to playlist directly from search
 - [ ] Redux
 - [ ] Song list (restructure the current criteria)
+- [ ] Backend support
+- [ ] google login
