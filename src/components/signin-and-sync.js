@@ -14,7 +14,7 @@ export default function SignInAndSync({ onSignIn, onSignInError, user, syncToSer
                     ? (
                         <div className="relative"
                             onMouseLeave={() => {
-                                // setIsMenuVisible(false);
+                                setIsMenuVisible(false);
                             }}
                             onMouseEnter={() => {
                                 setIsMenuVisible(true);
