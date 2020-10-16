@@ -19,5 +19,7 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 ### Future Features
 - [ ] Persistant volume change 
 - [ ] Shuffle
-- [ ] Redux
+- [ ] Redux (Will make everything breeze)
+- [ ] Drag and drop to customize playlist
+- [ ] Show no results found on no result found in search
 - [ ] More colorful Toast Notification
