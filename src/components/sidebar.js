@@ -2,13 +2,15 @@ import React, { useState } from 'react'
 import { Add as AddIcon } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import ItemMenu from './item-menu';
+import { withToast } from '../contexts/toast-context';
 
-export default function Sidebar({
+function SidebarComponent({
     playlists,
     addPlaylist,
     removePlaylist,
     selectPlaylist,
-    selectedPlaylist
+    selectedPlaylist,
+    addToast
 }) {
 
     const [newPlaylistName, setNewPlaylistName] = useState("");
@@ -26,7 +28,7 @@ export default function Sidebar({
         <div className="sidebar bg-white">
             <div className="p-10 flex flex-col items-center">
                 <img src="https://avatars2.githubusercontent.com/u/20546147?s=460&v=4"
-                    className="rounded-full w-32 h-32 shadow-lg" />
+                    className="rounded-full w-32 h-32 shadow-lg" alt={"Chahar"} />
                 <div className="font-bold text-gray-800 text-xl mt-5 text-center">Chahar</div>
                 <div className="text-gray-500 text-center">chaharshubhamsingh</div>
             </div>
@@ -93,3 +95,7 @@ export default function Sidebar({
         </div>
     )
 }
+
+const Sidebar = withToast(SidebarComponent);
+
+export default Sidebar;

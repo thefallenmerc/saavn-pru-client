@@ -2,12 +2,21 @@ import { IconButton } from '@material-ui/core';
 import Axios from 'axios';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useState } from 'react';
-import { Close as CloseIcon} from '@material-ui/icons';
+import { Close as CloseIcon } from '@material-ui/icons';
 import SuggestionTile from './suggestion-tile';
 import Endpoints from '../lib/endpoints';
 import Loader from './loader';
 
-export default function SearchBox({ suggestions, setSuggestions, addToPlaylist, playSong }) {
+export default function SearchBox({
+    suggestions,
+    setSuggestions,
+    addToPlaylist,
+    playSong,
+    playingList,
+    selectedPlaylist,
+    playlists,
+    removeFromPlaylist
+}) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [query, setQuery] = useState("");
@@ -89,7 +98,15 @@ export default function SearchBox({ suggestions, setSuggestions, addToPlaylist, 
                             {
                                 isLoading
                                     ? <Loader size="24px" className="mt-2 w-full flex justify-center" />
-                                    : suggestions.map(suggestion => <SuggestionTile suggestion={suggestion} playSong={selectSong} key={suggestion.id} />)
+                                    : suggestions.map(suggestion => <SuggestionTile
+                                        suggestion={suggestion}
+                                        playSong={selectSong}
+                                        key={suggestion.id}
+                                        playlists={playlists}
+                                        selectedPlaylist={selectedPlaylist}
+                                        addToPlaylist={addToPlaylist}
+                                        removeFromPlaylist={removeFromPlaylist}
+                                    />)
                             }
                         </div>
                     </div>

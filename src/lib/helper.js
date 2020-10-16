@@ -41,7 +41,7 @@ const Helper = {
         document.body.appendChild(element);
 
         element.click();
-        console.log({ element })
+
         document.body.removeChild(element);
     },
 }

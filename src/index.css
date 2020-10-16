@@ -118,6 +118,30 @@ body {
   border-radius: 2rem;
 }
 
+/* toastr */
+
+.ToastNotifier {
+  position: fixed;
+  right: 1rem;
+  bottom: 4.75rem;
+}
+
+.ToastNotifier .toast .toast-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ToastNotifier>.toast>.toast-delete {
+  display: block;
+  width: 20px;
+  color: #fffa;
+  cursor: pointer;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-left: 1rem;
+}
+
 /* animations */
 
 .spinner {

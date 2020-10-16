@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:3100/api";
+const baseURL = "https://pru-saavn.herokuapp.com/api";
 
 const Endpoints = {
     search: query => baseURL + "/search?query=" + query,

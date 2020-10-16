@@ -10,6 +10,7 @@ import Sidebar from './components/sidebar';
 import Axios from 'axios';
 import Endpoints from './lib/endpoints';
 import SignInAndSync from './components/signin-and-sync';
+import { ToastContext, ToastNotifier } from './contexts/toast-context';
 
 function App() {
 
@@ -26,17 +27,22 @@ function App() {
     "Recent": [],
     "Favorite": []
   });
+  // toaster
+  const [toasts, setToasts] = useState([]);
+  let listeners = [];
 
   // Add new playlist to list
   const addPlaylist = (playlistName, playlistContent = []) => {
     const newPlaylists = { ...playlists, [playlistName]: playlistContent };
     updatePlaylists(newPlaylists);
+    addToast("Added playlist \"" + playlistName + "\"");
   }
 
   // Update an existing playing with new song list
   const updatePlaylist = (playlistName, playlistContent = []) => {
     console.log('updating', { ...playlists, [playlistName]: playlistContent })
     updatePlaylists({ ...playlists, [playlistName]: playlistContent });
+    addToast("Updated " + playlistName);
   }
 
   // save playlists object to state and localstorage
@@ -53,6 +59,7 @@ function App() {
       if (indexOfSongInOldList < 0) {
         updatePlaylist(playlistName, [...oldPlaylist, song])
         // index at which song is added
+        addToast("Added " + song.song + " to " + playlistName);
         return oldPlaylist.length;
       } else {
         return indexOfSongInOldList;
@@ -68,6 +75,7 @@ function App() {
         const newPlaylist = playlists[playlistName];
         newPlaylist.splice(index, 1);
         updatePlaylist(playlistName, newPlaylist);
+        addToast("Removed " + song.song + " from " + playlistName);
       }
     }
   }
@@ -86,6 +94,7 @@ function App() {
         if (selectedPlaylist === playlistName) {
           setSelectedPlaylist("Recent");
         }
+        addToast("Removed playlist \"" + playlistName + "\"!");
       }
     }
   }
@@ -94,9 +103,11 @@ function App() {
   const playSong = (playlistName, songIndex) => {
     console.log("playing", playlistName, songIndex);
     setPlayingList([playlistName, songIndex]);
+
     try {
       const song = playlists[playlistName][songIndex];
       if (song) {
+        addToast("Playing " + song.song + " now.");
         // add to recent if not there
         if (playlists["Recent"].findIndex(r => r.id === song.id) === -1) {
           addToPlaylist("Recent", song);
@@ -109,6 +120,7 @@ function App() {
   const clearRecents = () => {
     if (playlists["Recent"].length > 0) {
       updatePlaylist("Recent", []);
+      addToast("Cleared \"Recent\"");
     }
   }
 
@@ -122,6 +134,7 @@ function App() {
     } else {
       setPlayingList([playListName, songIndex + 1]);
     }
+    addToast("Playing next song");
   };
 
   // Play prev song
@@ -134,11 +147,11 @@ function App() {
     } else {
       setPlayingList([playListName, songIndex - 1]);
     }
+    addToast("Playing previous song");
   };
 
   // google signin
   const onSignIn = googleUser => {
-
     Axios.get(Endpoints.signIn, {
       headers: {
         Authorization: "Bearer " + googleUser.tokenId
@@ -149,8 +162,10 @@ function App() {
         setUser(user);
         // save the user to localstorage
         localStorage.setItem('user', JSON.stringify(user));
+        addToast("Signed in as " + user.name, "", "success");
       })
       .catch(error => {
+        addToast("Couldn't auto signin!", "", "danger");
         console.log({ error });
       })
   }
@@ -158,10 +173,12 @@ function App() {
   // google signin
   const onSignInError = error => {
     console.error(error);
+    addToast("Could not sign you in!");
   }
 
   // sync state to server
   const syncToServer = () => {
+    addToast("Sync to server initiated");
     Axios.post(Endpoints.syncUp, {
       playlists
     }, {
@@ -169,9 +186,16 @@ function App() {
         Authorization: "Bearer " + user.token
       }
     })
+      .then(response => {
+        addToast("Synced to server", "", "success");
+      }).catch(error => {
+        addToast("Couldn't sync to server!");
+        console.error(error);
+      })
   }
 
   const syncFromServer = () => {
+    addToast("Sync from server initiated");
     Axios.get(Endpoints.syncDown, {
       headers: {
         Authorization: "Bearer " + user.token
@@ -180,7 +204,28 @@ function App() {
       .then(response => {
         const { data } = response;
         updatePlaylists(data.playlists);
+        addToast("Synced from server", "", "success");
       })
+      .catch(error => {
+        addToast("Couldn't sync from server!");
+        console.error(error);
+      })
+  }
+
+
+
+  const addToast = (title = '', message = '', type = '') => {
+    const toast = { title, message, type, timestamp: (new Date()).getTime() };
+    setToasts([...toasts, toast]);
+    listeners.push(setTimeout(() => {
+      removeToast(toast);
+    }, 3000));
+  }
+
+  const removeToast = toast => {
+    const newToast = [...toasts];
+    newToast.splice(newToast.find(t => t.timestamp === toast.timestamp), 1);
+    setToasts(newToast);
   }
 
   // load playlists
@@ -216,99 +261,118 @@ function App() {
     setPlaylists(playlistsToUpdate);
   }, []);
 
+  useEffect(() => {
+    // toaster cleanup
+    return () => {
+      listeners.forEach(l => {
+        clearTimeout(l);
+      })
+    }
+  }, []);
+
   return (
-    <div className="bg-gray-100">
-      {/* sidebar */}
-      <Sidebar
-        playlists={playlists}
-        addPlaylist={addPlaylist}
-        selectedPlaylist={selectedPlaylist}
-        removePlaylist={removePlaylist}
-        selectPlaylist={playlistName => {
-          setSelectedPlaylist(playlistName);
-        }} />
-      {/* main area */}
-      <div className="main">
-        <div className="flex justify-between items-center">
-          {/* Search field */}
-          <SearchBox
-            suggestions={suggestions}
-            setSuggestions={setSuggestions}
-            addToPlaylist={addToPlaylist}
-            playSong={playSong}
-            onSignIn={onSignIn}
-            onSignInError={onSignInError} />
-          {/* Other options */}
-          <SignInAndSync
-            onSignIn={onSignIn}
-            onSignInError={onSignInError}
-            syncToServer={syncToServer}
-            syncFromServer={syncFromServer}
-            user={user} />
-        </div>
-        {/* Main Content */}
-        <div className="pl-10 pt-3 flex pb-48">
-          <div className="md:w-3/5 w-full">
-            {/* recent */}
-            {
-              playlists["Recent"].length > 0 && (
-                <div>
-                  <div className="flex items-center">
-                    <span className="text-xl font-bold text-gray-800 mr-3">Recent Played</span>
-                    <IconButton typeof="danger" className="focus:outline-none" onClick={() => {
-                      clearRecents();
-                    }}><CloseIcon fontSize="small" /></IconButton>
+    <ToastContext.Provider value={{
+      toasts,
+      addToast,
+      removeToast
+    }}>
+      <div className="bg-gray-100">
+        {/* sidebar */}
+        <Sidebar
+          playlists={playlists}
+          addPlaylist={addPlaylist}
+          selectedPlaylist={selectedPlaylist}
+          removePlaylist={removePlaylist}
+          selectPlaylist={playlistName => {
+            setSelectedPlaylist(playlistName);
+          }} />
+        {/* main area */}
+        <div className="main">
+          <div className="flex justify-between items-center">
+            {/* Search field */}
+            <SearchBox
+              suggestions={suggestions}
+              setSuggestions={setSuggestions}
+              addToPlaylist={addToPlaylist}
+              playSong={playSong}
+              playingList={playingList}
+              selectedPlaylist={selectedPlaylist}
+              playlists={Object.keys(playlists)}
+              removeFromPlaylist={removeFromPlaylist}
+            />
+            {/* Other options */}
+            <SignInAndSync
+              onSignIn={onSignIn}
+              onSignInError={onSignInError}
+              syncToServer={syncToServer}
+              syncFromServer={syncFromServer}
+              user={user} />
+          </div>
+          {/* Main Content */}
+          <div className="pl-10 pt-3 flex pb-48">
+            <div className="md:w-3/5 w-full">
+              {/* recent */}
+              {
+                playlists["Recent"].length > 0 && (
+                  <div>
+                    <div className="flex items-center">
+                      <span className="text-xl font-bold text-gray-800 mr-3">Recent Played</span>
+                      <IconButton typeof="danger" className="focus:outline-none" onClick={() => {
+                        clearRecents();
+                      }}><CloseIcon fontSize="small" /></IconButton>
+                    </div>
+                    <div className="mt-3">
+                      <RecentCarousal>
+                        {
+                          playlists["Recent"].map((recent, index) => <RecentTile recent={recent} songIndex={index} playSong={playSong} key={recent.id} />)
+                        }
+                      </RecentCarousal>
+                    </div>
                   </div>
-                  <div className="mt-3">
-                    <RecentCarousal>
-                      {
-                        playlists["Recent"].map((recent, index) => <RecentTile recent={recent} songIndex={index} playSong={playSong} key={recent.id} />)
-                      }
-                    </RecentCarousal>
-                  </div>
-                </div>
-              )
-            }
-            <div className="py-5">
-              {/* Song List */}
-              <h1 className="text-xl font-bold text-gray-800">
-                {selectedPlaylist ? selectedPlaylist : "No playlist selected"}
-              </h1>
-              <span className="font-bold text-gray-500 text-xs">
-                {selectedPlaylist && playlists[selectedPlaylist] ? playlists[selectedPlaylist].length : "0"} Song(s)
+                )
+              }
+              <div className="py-5">
+                {/* Song List */}
+                <h1 className="text-xl font-bold text-gray-800">
+                  {selectedPlaylist ? selectedPlaylist : "No playlist selected"}
+                </h1>
+                <span className="font-bold text-gray-500 text-xs">
+                  {selectedPlaylist && playlists[selectedPlaylist] ? playlists[selectedPlaylist].length : "0"} Song(s)
               </span>
-              <div className="py-2">
-                {
-                  selectedPlaylist && playlists[selectedPlaylist]
-                  && playlists[selectedPlaylist].map((song, index) => <PlaylistItem
-                    song={song}
-                    songIndex={index}
-                    playSong={playSong}
-                    key={song.id}
-                    playingList={playingList}
-                    selectedPlaylist={selectedPlaylist}
-                    playlists={Object.keys(playlists)}
-                    addToPlaylist={addToPlaylist}
-                    removeFromPlaylist={removeFromPlaylist}
-                  />)
-                }
+                <div className="py-2">
+                  {
+                    selectedPlaylist && playlists[selectedPlaylist]
+                    && playlists[selectedPlaylist].map((song, index) => <PlaylistItem
+                      song={song}
+                      songIndex={index}
+                      playSong={playSong}
+                      key={song.id}
+                      playingList={playingList}
+                      selectedPlaylist={selectedPlaylist}
+                      playlists={Object.keys(playlists)}
+                      addToPlaylist={addToPlaylist}
+                      removeFromPlaylist={removeFromPlaylist}
+                    />)
+                  }
+                </div>
               </div>
             </div>
-          </div>
-          <div className="md:w-2/5 w-full px-5">
-            <h1 className="text-xl font-bold text-gray-800">Now Playing &gt; {playingList[0]}</h1>
-            <span className="font-bold text-gray-500 text-xs">{playlists[playingList[0]].length} Song(s) on the list</span>
-            <div className="py-2">
-              <MusicPlayer
-                song={playlists[playingList[0]][playingList[1]]}
-                nextSong={nextSong}
-                prevSong={prevSong}
-              />
+            <div className="md:w-2/5 w-full px-5">
+              <h1 className="text-xl font-bold text-gray-800">Now Playing &gt; {playingList[0]}</h1>
+              <span className="font-bold text-gray-500 text-xs">{playlists[playingList[0]].length} Song(s) on the list</span>
+              <div className="py-2">
+                <MusicPlayer
+                  song={playlists[playingList[0]][playingList[1]]}
+                  nextSong={nextSong}
+                  prevSong={prevSong}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <ToastNotifier />
+    </ToastContext.Provider>
   );
 }
 

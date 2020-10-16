@@ -9,14 +9,15 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 - [ ] Add / Remove playlists
 - [ ] Play a playlist
 - [ ] Next / Previous songs
+- [ ] google login
+- [ ] Backend support
+- [ ] Add song to playlist directly from search
+- [ ] Toast Notification
 
 
 
 ### Future Features
 - [ ] Persistant volume change 
 - [ ] Shuffle
-- [ ] Add song to playlist directly from search
 - [ ] Redux
-- [ ] Song list (restructure the current criteria)
-- [ ] Backend support
-- [ ] google login
+- [ ] More colorful Toast Notification
