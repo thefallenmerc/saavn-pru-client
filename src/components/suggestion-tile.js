@@ -33,9 +33,9 @@ export default function SuggestionTile({
                 }}>
                 <img src={suggestion.image} className="rounded w-12 h-12 border" alt={suggestion.song} />
                 <div className="flex-grow text-gray-800 text-xs truncate pl-2">
-                    <div>Song: {suggestion.song}</div>
-                    <div>Album: {suggestion.album}</div>
-                    <div>Singers: {suggestion.singers}</div>
+                    <div>Song: {Helper.unescape(suggestion.song)}</div>
+                    <div>Album: {Helper.unescape(suggestion.album)}</div>
+                    <div>Singers: {Helper.unescape(suggestion.singers)}</div>
                 </div>
             </div>
             {/* More Options */}

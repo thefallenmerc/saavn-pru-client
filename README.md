@@ -14,6 +14,7 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 - [ ] Add song to playlist directly from search
 - [ ] Toast Notification
 - [ ] Mobile view
+- [ ] More colorful Toast Notification
 
 
 
@@ -25,4 +26,3 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 - [ ] Redux (Will make everything breeze)
 - [ ] Drag and drop to customize playlist
 - [ ] Show no results found on no result found in search
-- [ ] More colorful Toast Notification

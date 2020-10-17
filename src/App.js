@@ -219,8 +219,8 @@ function App() {
 
 
 
-  const addToast = (title = '', message = '', type = '') => {
-    const toast = { title, message, type, timestamp: (new Date()).getTime() };
+  const addToast = (title = '', message = '', type = 'default') => {
+    const toast = { title, message, type, timestamp: (new Date()).getTime() + Math.random() };
     setToasts([...toasts, toast]);
     listeners.push(setTimeout(() => {
       removeToast(toast);
@@ -231,6 +231,10 @@ function App() {
     const newToast = [...toasts];
     newToast.splice(newToast.find(t => t.timestamp === toast.timestamp), 1);
     setToasts(newToast);
+  }
+
+  const closeSidebar = _ => {
+    setIsSidebarOpen(false);
   }
 
   // load playlists
@@ -299,6 +303,7 @@ function App() {
             setSelectedPlaylist(playlistName);
           }}
           isSidebarOpen={isSidebarOpen}
+          closeSidebar={closeSidebar}
         />
         {/* main area */}
         <div className={"main animated " + (isSidebarOpen ? "" : "sidebar-closed")}>

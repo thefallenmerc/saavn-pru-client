@@ -133,7 +133,6 @@ body {
 
 .ToastNotifier {
   position: fixed;
-  left: 1rem;
   right: 1rem;
   bottom: 1rem;
 }
@@ -142,6 +141,31 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.ToastNotifier .toast .toast-close-button {
+  font-size: 1rem;
+  padding: 6px;
+}
+
+.ToastNotifier .toast.default {
+  background-color: #333;
+}
+
+.ToastNotifier .toast.success {
+  background-color: #333;
+}
+
+.ToastNotifier .toast.info {
+  background-color: dodgerblue;
+}
+
+.ToastNotifier .toast.warning {
+  background-color: goldenrod;
+}
+
+.ToastNotifier .toast.danger {
+  background-color: red;
 }
 
 .ToastNotifier>.toast>.toast-delete {

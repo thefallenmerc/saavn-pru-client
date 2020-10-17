@@ -19,7 +19,8 @@ function SidebarComponent({
     selectPlaylist,
     selectedPlaylist,
     addToast,
-    isSidebarOpen
+    isSidebarOpen,
+    closeSidebar
 }) {
 
     const [newPlaylistName, setNewPlaylistName] = useState("");
@@ -55,6 +56,7 @@ function SidebarComponent({
                             }
                             onClick={() => {
                                 selectPlaylist(playlistName);
+                                closeSidebar();
                             }}
                             key={playlistName}>
                             <span>{playlistName}</span>

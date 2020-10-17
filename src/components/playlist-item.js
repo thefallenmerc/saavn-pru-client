@@ -33,15 +33,15 @@ export default function PlaylistItem({
                     ? { color: "red" } : {}
             }></i>
             {/* Song Name */}
-            <div className="flex-grow">
+            <div className="flex-grow truncate">
                 <div title={"Play " + song.song}
-                    className="font-bold truncate md:w-56 md:flex-grow pr-3 md:flex-shrink-0 cursor-pointer"
+                    className="font-bold truncate md:w-56 md:flex-grow pr-3 md:flex-shrink-0 cursor-pointer truncate"
                     onClick={() => {
                         playSong(selectedPlaylist, songIndex);
-                    }}>{song.song}</div>
+                    }}>{Helper.unescape(song.song)}</div>
                 {/* Song Singer */}
                 <div className="flex">
-                    <div className="text-gray-500 font-semibold pr-2 truncate md:flex-shrink-0">{song.singers}</div>
+                    <div className="text-gray-500 font-semibold pr-2 truncate md:flex-shrink-0">{Helper.unescape(song.singers)}</div>
                     {/* Song Duration */}
                     <div className="text-gray-500 font-semibold md:w-24">{Helper.formatSeconds(song.duration)}</div>
                     {/* Song Fav Button */}
