@@ -27,8 +27,9 @@ export default function SuggestionTile({
             <div
                 title={"Play " + suggestion.song}
                 className="flex items-center justify-between flex-grow"
-                onClick={() => {
+                onClick={event => {
                     playSong(suggestion);
+                    event.stopPropagation();
                     setIsFocused(false);
                 }}>
                 <img src={suggestion.image} className="rounded w-12 h-12 border" alt={suggestion.song} />

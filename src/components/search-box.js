@@ -1,7 +1,7 @@
 import { IconButton } from '@material-ui/core';
 import Axios from 'axios';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Close as CloseIcon } from '@material-ui/icons';
 import SuggestionTile from './suggestion-tile';
 import Endpoints from '../lib/endpoints';
@@ -41,7 +41,14 @@ export default function SearchBox({
     const clearSuggestions = _ => {
         setQuery("");
         setSuggestions([]);
+        setIsFocused(false);
     }
+
+    useEffect(() => {
+        if(!isFocused && suggestions.length > 0) {
+            clearSuggestions();
+        }
+    }, [isFocused, suggestions.length]);
 
     const selectSong = song => {
         clearSuggestions();
@@ -55,10 +62,11 @@ export default function SearchBox({
     return (
         <div
             onMouseLeave={() => {
-                // clearSuggestions();
+                clearSuggestions();
+                setIsFocused(false);
             }}
             onClick={() => {
-                setIsFocused(true);
+                setIsFocused(false);
             }}
             className={
                 "SearchBox animated md:px-10 search-box w-full md:w-1/2 flex items-center "
@@ -79,6 +87,10 @@ export default function SearchBox({
                         }
                 }
                 placeholder="Search..."
+                onClick={event => {
+                    setIsFocused(true);
+                    event.stopPropagation();
+                }}
                 onChange={event => {
                     const { value } = event.target;
                     setQuery(value);
@@ -98,7 +110,6 @@ export default function SearchBox({
                             <IconButton className="clear-suggestion focus:outline-none" title="Clear Suggestions"
                                 onClick={event => {
                                     clearSuggestions();
-                                    setIsFocused(false);
                                     event.stopPropagation();
                                 }}>
                                 <CloseIcon fontSize="small" />
