@@ -23,21 +23,31 @@ export default function PlaylistItem({
                     setIsMenuOpen(false);
                 }
             }}
-            className="px-2 py-2 bg-white playlist-item rounded my-3 flex items-center hover:shadow-lg">
-            <span className="font-bold mx-3 w-4">{songIndex + 1}</span>
+            className="PlaylistItem px-2 py-2 bg-white playlist-item rounded my-3 flex items-center hover:shadow-lg">
+            {/* Song Index */}
+            <span className="font-bold mx-3 w-4 hidden md:block">{songIndex + 1}</span>
+            {/* Song Image */}
             <img src={song.image} className="rounded w-12 h-12 border" alt={song.song} />
             <i className="icon icon-play text-gray-300 mx-1" style={
                 selectedPlaylist === playingList[0] && songIndex === playingList[1]
-                ? { color: "red" } : {}
+                    ? { color: "red" } : {}
             }></i>
-            <div title={"Play " + song.song}
-                className="font-bold truncate w-56 flex-grow pr-3 flex-shrink-0 cursor-pointer"
-                onClick={() => {
-                    playSong(selectedPlaylist, songIndex);
-                }}>{song.song}</div>
-            <div className="text-gray-500 font-semibold w-48 truncate flex-shrink-0">{song.singers}</div>
-            <div className="text-gray-500 font-semibold w-24">{Helper.formatSeconds(song.duration)}</div>
-            <div className="text-gray-500 font-semibold w-16 cursor-pointer">
+            {/* Song Name */}
+            <div className="flex-grow">
+                <div title={"Play " + song.song}
+                    className="font-bold truncate md:w-56 md:flex-grow pr-3 md:flex-shrink-0 cursor-pointer"
+                    onClick={() => {
+                        playSong(selectedPlaylist, songIndex);
+                    }}>{song.song}</div>
+                {/* Song Singer */}
+                <div className="flex">
+                    <div className="text-gray-500 font-semibold pr-2 truncate md:flex-shrink-0">{song.singers}</div>
+                    {/* Song Duration */}
+                    <div className="text-gray-500 font-semibold md:w-24">{Helper.formatSeconds(song.duration)}</div>
+                    {/* Song Fav Button */}
+                </div>
+            </div>
+            <div className="text-gray-500 font-semibold flex-shrink-0 cursor-pointer hidden md:block">
                 <IconButton className="focus:outline-none" onClick={() => {
                     addToPlaylist("Favorite", song);
                 }}>
@@ -46,7 +56,7 @@ export default function PlaylistItem({
                 </IconButton>
             </div>
             {/* More Options */}
-            <div className="text-gray-500 font-semibold w-16 cursor-pointer relative">
+            <div className="text-gray-500 font-semibold flex-shrink-0 cursor-pointer relative">
                 <IconButton className="focus:outline-none" onClick={() => {
                     setIsMenuOpen(!isMenuOpen);
                 }}>

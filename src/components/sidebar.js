@@ -3,18 +3,26 @@ import { Add as AddIcon } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import ItemMenu from './item-menu';
 import { withToast } from '../contexts/toast-context';
+import SignInAndSync from './signin-and-sync';
 
 function SidebarComponent({
+    // Singin and Sync Related
+    onSignIn,
+    onSignInError,
+    user,
+    syncToServer,
+    syncFromServer,
+    // Playlist Related
     playlists,
     addPlaylist,
     removePlaylist,
     selectPlaylist,
     selectedPlaylist,
-    addToast
+    addToast,
+    isSidebarOpen
 }) {
 
     const [newPlaylistName, setNewPlaylistName] = useState("");
-
     // somhow selectPlaylist doesnt directly work in further subcomponents
     const safeSelectPlaylist = playlistName => {
         selectPlaylist(playlistName);
@@ -25,13 +33,18 @@ function SidebarComponent({
     }
 
     return (
-        <div className="sidebar bg-white">
-            <div className="p-10 flex flex-col items-center">
-                <img src="https://avatars2.githubusercontent.com/u/20546147?s=460&v=4"
-                    className="rounded-full w-32 h-32 shadow-lg" alt={"Chahar"} />
-                <div className="font-bold text-gray-800 text-xl mt-5 text-center">Chahar</div>
-                <div className="text-gray-500 text-center">chaharshubhamsingh</div>
-            </div>
+        <div className={
+            "Sidebar sidebar animated bg-white pt-2 pb-10 "
+            + (isSidebarOpen ? "" : "closed")
+        }>
+            {/* Sigin And Sync */}
+            <SignInAndSync
+                onSignIn={onSignIn}
+                onSignInError={onSignInError}
+                syncToServer={syncToServer}
+                syncFromServer={syncFromServer}
+                user={user} />
+            {/* Playlists */}
             <div className="px-4">
                 <div className="px-4 mb-5 uppercase font-bold text-gray-500">My Music</div>
                 {

@@ -9,7 +9,8 @@ export default function SuggestionTile({
     playlists,
     selectedPlaylist,
     addToPlaylist,
-    removeFromPlaylist
+    removeFromPlaylist,
+    setIsFocused
 }) {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +29,7 @@ export default function SuggestionTile({
                 className="flex items-center justify-between flex-grow"
                 onClick={() => {
                     playSong(suggestion);
+                    setIsFocused(false);
                 }}>
                 <img src={suggestion.image} className="rounded w-12 h-12 border" alt={suggestion.song} />
                 <div className="flex-grow text-gray-800 text-xs truncate pl-2">

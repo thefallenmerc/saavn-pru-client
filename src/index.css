@@ -8,9 +8,14 @@ body {
 .sidebar {
   width: 250px;
   position: fixed;
+  overflow-y: auto;
   height: 100vh;
   left: 0;
   top: 0;
+}
+
+.sidebar.closed {
+  left: -250px;
 }
 
 .sidebar .suggestion-list {
@@ -25,19 +30,21 @@ body {
 .clear-suggestion {
   position: absolute !important;
   right: 48px;
+  top: 11px;
   bottom: 8px;
 }
 
 .loading-suggestion {
   position: absolute !important;
-  right: 55px;
-  bottom: 21px;
+  right: 52px;
+  bottom: 9px;
 }
 
 .suggestion-box {
   position: absolute;
   width: 100%;
   left: 0;
+  top: 41px;
   z-index: 5;
 }
 
@@ -49,8 +56,12 @@ body {
 }
 
 .main {
-  padding-left: 250px;
+  margin-left: 250px;
   min-height: 100vh;
+}
+
+.main.sidebar-closed {
+  margin-left: 0;
 }
 
 .playlist-item {
@@ -122,8 +133,9 @@ body {
 
 .ToastNotifier {
   position: fixed;
+  left: 1rem;
   right: 1rem;
-  bottom: 4.75rem;
+  bottom: 1rem;
 }
 
 .ToastNotifier .toast .toast-body {
@@ -188,5 +200,73 @@ body {
   }
   to {
     transform: rotate(359deg);
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .top-bar {
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    left: 250px;
+    right: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+  }
+  .main.sidebar-closed .top-bar {
+    left: 0;
+  }
+  .main {
+    width: 100vw;
+    padding-top: 55px;
+  }
+  .loading-suggestion {
+    right: 10px;
+  }
+  .player {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    top: 100vh;
+    bottom: -100vh;
+    background-color: transparent;
+    background-image: none;
+  }
+  .player.visible-on-mobile {
+    top: 0;
+    bottom: 0;
+    background-color: #0003;
+  }
+  .search-box.focused {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding: 0.5rem;
+    left: 0;
+    z-index: 5;
+    right: 0;
+    background-color: #0003;
+    align-items: flex-start;
+  }
+  .search-box.focused .loading-suggestion {
+    right: 20px;
+    top: 22px;
+    top: 17px;
+    bottom: auto;
+  }
+  .search-box.focused .clear-suggestion {
+    right: 10px;
+    top: 10px;
+    bottom: auto;
+  }
+  .search-box.focused .suggestion-box {
+    top: 49px;
+    padding: 0 0.5rem;
   }
 }

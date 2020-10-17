@@ -15,10 +15,17 @@ export default function SearchBox({
     playingList,
     selectedPlaylist,
     playlists,
-    removeFromPlaylist
+    removeFromPlaylist,
+    // Sidebar related
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isMusicPlayerVisible,
+    setIsMusicPlayerVisible,
 }) {
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+
     const [query, setQuery] = useState("");
 
     const debounceQuery = useCallback(debounce(value => {
@@ -48,11 +55,18 @@ export default function SearchBox({
     return (
         <div
             onMouseLeave={() => {
-                clearSuggestions();
+                // clearSuggestions();
             }}
-            className="pt-6 py-2 px-10 search-box w-full md:w-1/2">
+            onClick={() => {
+                setIsFocused(true);
+            }}
+            className={
+                "SearchBox animated md:px-10 search-box w-full md:w-1/2 flex items-center "
+                + (isFocused ? "focused " : "")
+                + (suggestions.length > 0 ? "has-suggestions" : "")
+            }>
             <input value={query}
-                className="border py-3 px-5 w-full focus:outline-none"
+                className="border px-3 py-2 m:py-3 m:px-5 w-full focus:outline-none flex-grow"
                 style={
                     suggestions.length > 0
                         ? {
@@ -82,8 +96,10 @@ export default function SearchBox({
                     : suggestions.length > 0
                         ? (
                             <IconButton className="clear-suggestion focus:outline-none" title="Clear Suggestions"
-                                onClick={() => {
+                                onClick={event => {
                                     clearSuggestions();
+                                    setIsFocused(false);
+                                    event.stopPropagation();
                                 }}>
                                 <CloseIcon fontSize="small" />
                             </IconButton>
@@ -98,15 +114,18 @@ export default function SearchBox({
                             {
                                 isLoading
                                     ? <Loader size="24px" className="mt-2 w-full flex justify-center" />
-                                    : suggestions.map(suggestion => <SuggestionTile
-                                        suggestion={suggestion}
-                                        playSong={selectSong}
-                                        key={suggestion.id}
-                                        playlists={playlists}
-                                        selectedPlaylist={selectedPlaylist}
-                                        addToPlaylist={addToPlaylist}
-                                        removeFromPlaylist={removeFromPlaylist}
-                                    />)
+                                    : suggestions.map(suggestion => (
+                                        <SuggestionTile
+                                            suggestion={suggestion}
+                                            playSong={selectSong}
+                                            key={suggestion.id}
+                                            playlists={playlists}
+                                            selectedPlaylist={selectedPlaylist}
+                                            addToPlaylist={addToPlaylist}
+                                            removeFromPlaylist={removeFromPlaylist}
+                                            setIsFocused={setIsFocused}
+                                        />
+                                    ))
                             }
                         </div>
                     </div>

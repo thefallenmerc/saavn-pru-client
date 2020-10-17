@@ -13,12 +13,15 @@ This project uses the [Unofficial Saavn APIs](https://github.com/thefallenmerc/s
 - [ ] Backend support
 - [ ] Add song to playlist directly from search
 - [ ] Toast Notification
+- [ ] Mobile view
 
 
 
 ### Future Features
 - [ ] Persistant volume change 
 - [ ] Shuffle
+- [ ] Add rename playlist feature 
+- [ ] Show favorite
 - [ ] Redux (Will make everything breeze)
 - [ ] Drag and drop to customize playlist
 - [ ] Show no results found on no result found in search

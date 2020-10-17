@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MusicPlayer from './components/media-player';
 import CloseIcon from '@material-ui/icons/Close';
 import { IconButton } from '@material-ui/core';
+import { MusicNote, Menu as MenuIcon } from '@material-ui/icons';
 import RecentTile from './components/recent-tile';
 import PlaylistItem from './components/playlist-item';
 import RecentCarousal from './components/recent-carousel';
@@ -9,7 +10,6 @@ import SearchBox from './components/search-box';
 import Sidebar from './components/sidebar';
 import Axios from 'axios';
 import Endpoints from './lib/endpoints';
-import SignInAndSync from './components/signin-and-sync';
 import { ToastContext, ToastNotifier } from './contexts/toast-context';
 
 function App() {
@@ -30,6 +30,10 @@ function App() {
   // toaster
   const [toasts, setToasts] = useState([]);
   let listeners = [];
+  // sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // music player
+  const [isMusicPlayerVisible, setIsMusicPlayerVisible] = useState(false);
 
   // Add new playlist to list
   const addPlaylist = (playlistName, playlistContent = []) => {
@@ -107,7 +111,6 @@ function App() {
     try {
       const song = playlists[playlistName][songIndex];
       if (song) {
-        addToast("Playing " + song.song + " now.");
         // add to recent if not there
         if (playlists["Recent"].findIndex(r => r.id === song.id) === -1) {
           addToPlaylist("Recent", song);
@@ -276,19 +279,47 @@ function App() {
       addToast,
       removeToast
     }}>
-      <div className="bg-gray-100">
+      <div className="App bg-gray-100">
         {/* sidebar */}
         <Sidebar
+          // Signin and Sync related
+          onSignIn={onSignIn}
+          onSignInError={onSignInError}
+          syncToServer={syncToServer}
+          syncFromServer={syncFromServer}
+          user={user}
+          // Playlist related
           playlists={playlists}
           addPlaylist={addPlaylist}
           selectedPlaylist={selectedPlaylist}
           removePlaylist={removePlaylist}
           selectPlaylist={playlistName => {
             setSelectedPlaylist(playlistName);
-          }} />
+          }}
+          isSidebarOpen={isSidebarOpen}
+        />
         {/* main area */}
-        <div className="main">
-          <div className="flex justify-between items-center">
+        <div className={"main animated " + (isSidebarOpen ? "" : "sidebar-closed")}>
+          <div className="top-bar animated flex box-border justify-start items-center p-2 md:pt-6">
+            <div className="mr-2">
+              {
+                isSidebarOpen
+                  ? (
+                    <IconButton
+                      className="focus:outline-none"
+                      onClick={() => { setIsSidebarOpen(!isSidebarOpen) }}>
+                      <CloseIcon />
+                    </IconButton>
+                  )
+                  : (
+                    <IconButton
+                      className="focus:outline-none"
+                      onClick={() => { setIsSidebarOpen(!isSidebarOpen) }}>
+                      <MenuIcon />
+                    </IconButton>
+                  )
+              }
+            </div>
             {/* Search field */}
             <SearchBox
               suggestions={suggestions}
@@ -299,17 +330,24 @@ function App() {
               selectedPlaylist={selectedPlaylist}
               playlists={Object.keys(playlists)}
               removeFromPlaylist={removeFromPlaylist}
+              isSidebarOpen={isSidebarOpen}
+              setIsSidebarOpen={setIsSidebarOpen}
+              isMusicPlayerVisible={isMusicPlayerVisible}
+              setIsMusicPlayerVisible={setIsMusicPlayerVisible}
             />
-            {/* Other options */}
-            <SignInAndSync
-              onSignIn={onSignIn}
-              onSignInError={onSignInError}
-              syncToServer={syncToServer}
-              syncFromServer={syncFromServer}
-              user={user} />
+            {/* Music icon */}
+            <div className="ml-2 md:hidden">
+              <IconButton
+                className="focus:outline-none"
+                onClick={() => {
+                  setIsMusicPlayerVisible(!isMusicPlayerVisible)
+                }}>
+                <MusicNote />
+              </IconButton>
+            </div>
           </div>
           {/* Main Content */}
-          <div className="pl-10 pt-3 flex pb-48">
+          <div className="px-2 md:pl-10 md:pr-0 pt-3 md:flex pb-48">
             <div className="md:w-3/5 w-full">
               {/* recent */}
               {
@@ -342,29 +380,33 @@ function App() {
                 <div className="py-2">
                   {
                     selectedPlaylist && playlists[selectedPlaylist]
-                    && playlists[selectedPlaylist].map((song, index) => <PlaylistItem
-                      song={song}
-                      songIndex={index}
-                      playSong={playSong}
-                      key={song.id}
-                      playingList={playingList}
-                      selectedPlaylist={selectedPlaylist}
-                      playlists={Object.keys(playlists)}
-                      addToPlaylist={addToPlaylist}
-                      removeFromPlaylist={removeFromPlaylist}
-                    />)
+                    && playlists[selectedPlaylist].map((song, index) => (
+                      <PlaylistItem
+                        song={song}
+                        songIndex={index}
+                        playSong={playSong}
+                        key={song.id}
+                        playingList={playingList}
+                        selectedPlaylist={selectedPlaylist}
+                        playlists={Object.keys(playlists)}
+                        addToPlaylist={addToPlaylist}
+                        removeFromPlaylist={removeFromPlaylist}
+                      />
+                    ))
                   }
                 </div>
               </div>
             </div>
             <div className="md:w-2/5 w-full px-5">
-              <h1 className="text-xl font-bold text-gray-800">Now Playing &gt; {playingList[0]}</h1>
-              <span className="font-bold text-gray-500 text-xs">{playlists[playingList[0]].length} Song(s) on the list</span>
+              <h1 className="text-xl md:block hidden font-bold text-gray-800">Now Playing &gt; {playingList[0]}</h1>
+              <span className="font-bold md:block hidden text-gray-500 text-xs">{playlists[playingList[0]].length} Song(s) on the list</span>
               <div className="py-2">
                 <MusicPlayer
                   song={playlists[playingList[0]][playingList[1]]}
                   nextSong={nextSong}
                   prevSong={prevSong}
+                  isMusicPlayerVisible={isMusicPlayerVisible}
+                  setIsMusicPlayerVisible={setIsMusicPlayerVisible}
                 />
               </div>
             </div>

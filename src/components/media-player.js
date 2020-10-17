@@ -13,9 +13,15 @@ const defaultSong = {
     image: "https://images.unsplash.com/photo-1573247353133-0290e4606fbf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
 }
 
-export default function MusicPlayer({ song, nextSong, prevSong }) {
+export default function MusicPlayer({
+    song,
+    nextSong,
+    prevSong,
+    isMusicPlayerVisible,
+    setIsMusicPlayerVisible,
+}) {
 
-    if(!song) {
+    if (!song) {
         song = defaultSong;
     }
 
@@ -35,7 +41,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
             audioPlayer.volume = volume;
             setPlayer(audioPlayer);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [song]);
 
     useEffect(() => {
@@ -82,7 +88,7 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
             player.removeAttribute('src');
             player.load();
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [player]);
 
     // If song isnt there, or src is not set, return error
@@ -113,9 +119,17 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
     }
 
     return (
-        <div className="player p-5">
+        <div
+            onClick={() => {
+                setIsMusicPlayerVisible(false);
+            }}
+            className={"MusicPlayer animated player p-5 " + (isMusicPlayerVisible ? " visible-on-mobile" : "")}>
 
-            <div className="player-card px-8 text-center bg-white p-3 rounded-lg">
+            <div
+                onClick={event => {
+                    event.stopPropagation();
+                }}
+                className="player-card px-8 text-center bg-white p-3 rounded-lg">
                 {/* song art and detail */}
                 <div className="beat-box mx-auto my-3 flex justify-center items-center" style={{ width: "150px", height: "150px" }}>
                     <img src={song.image} alt={song.song} style={{ width: "150px", height: "150px" }} className={"rounded-full shadow-lg mx-auto mb-5 " + (player.paused ? "" : "heart-beat")} />
@@ -140,7 +154,11 @@ export default function MusicPlayer({ song, nextSong, prevSong }) {
                 </div>
             </div>
             {/* Control Card */}
-            <div className="flex player-card bg-white shadow rounded-lg justify-center mt-5">
+            <div
+                onClick={event => {
+                    event.stopPropagation();
+                }}
+                className="flex player-card bg-white shadow rounded-lg justify-center mt-5">
                 {/* Controls */}
                 <div className="flex items-center">
                     <i className="icon icon-to-start cursor-pointer text-gray-600 hover:text-red-500" title="Play Previous" onClick={() => { prevSong() }}></i>
