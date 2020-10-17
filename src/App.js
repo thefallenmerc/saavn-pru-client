@@ -279,6 +279,13 @@ function App() {
     }
   }, []);
 
+  useEffect(function() {
+    // check if currentplaylist empty
+    if (selectedPlaylist === "Recent" && playlists[selectedPlaylist] && playlists[selectedPlaylist].length === 0) {
+      addToast("It looks lonely here", "Maybe, Try searching a song.");
+    }
+  }, [selectedPlaylist]);
+
   return (
     <ToastContext.Provider value={{
       toasts,
