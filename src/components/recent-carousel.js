@@ -12,28 +12,28 @@ export default function RecentCarousal({ children }) {
             {
                 breakpoint: 1400,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: children.length >= 3 ? 3 : children.length,
                     slidesToScroll: 3,
                 }
             },
             {
                 breakpoint: 1200,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: children.length >= 2 ? 2 : children.length,
                     slidesToScroll: 2,
                 }
             },
             {
                 breakpoint: 720,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: children.length >= 3 ? 3 : children.length,
                     slidesToScroll: 3,
                 }
             },
             {
                 breakpoint: 640,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: children.length >= 2 ? 2 : children.length,
                     slidesToScroll: 2
                 }
             }

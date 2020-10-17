@@ -63,7 +63,9 @@ function App() {
       if (indexOfSongInOldList < 0) {
         updatePlaylist(playlistName, [...oldPlaylist, song])
         // index at which song is added
-        addToast("Added " + song.song + " to " + playlistName);
+        if (playlistName !== "Recent") {
+          addToast("Added " + song.song + " to " + playlistName);
+        }
         return oldPlaylist.length;
       } else {
         return indexOfSongInOldList;
